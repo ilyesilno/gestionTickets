@@ -2,204 +2,196 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-  @vite('resources/css/app.css')
-  @vite(['resources/js/app.js'])
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gestion des tickets</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@100;200;300;400;500;600;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url(https://fonts.googleapis.com/css2?family=Rubik:wght@100;200;300;400;500;600;800;900&display=swap);
-
     body {
       font-family: 'Rubik', sans-serif;
     }
 
-    body,
-    html {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-    }
-
-
-    li:hover i:first-child {
-      color: #20A8D8
-    }
-
+    /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 10px;
     }
 
     ::-webkit-scrollbar-track {
-      background-color: rgb(243, 244, 246);
+      background-color: #f3f4f6;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #888;
+      background: #a0aec0;
+      border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: #555;
+      background: #718096;
     }
   </style>
 </head>
 
-<body>
-  <div class="container flex w-full h-full">
-    <div class="w-[20%] border-r-2 flex bg-[#2F353A] text-white">
-      <div class="sidebar mt-5 flex flex-col justify-between my-6 w-full text-[#C8CACB]">
-        <div class="menuItems flex-1">
-          <h2 class="text-4xl text-center font-semibold mb-10 text-white">Gesticket</h2>
-          <ul class="flex flex-col text-lg font-medium">
-            <li
-              class="cursor-pointer block px-7 py-3.5 {{ request()->route()->getName() === 'admin-dashboard' ? 'bg-white text-black' : 'hover:bg-[#3A4248] hover:text-white' }}">
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-house"></i>
-                <a href="{{ route('admin-dashboard') }}">
-                  Tableau de bord
-                </a>
-              </span>
-            </li>
-            <li
-              class="cursor-pointer block px-7 py-3.5
-              {{ request()->route()->getName() === 'list-users' || request()->route()->getName() === 'create-user'
-                  ? 'bg-white text-black'
-                  : 'hover:bg-[#3A4248] hover:text-white' }} relative">
+<body class="h-screen overflow-hidden bg-white">
+  <div class="flex h-full w-full">
+    <!-- Sidebar -->
+    <nav class="w-1/5 bg-gray-50 text-gray-700 flex flex-col justify-between py-8 shadow border-r border-gray-200">
+      <div>
+        <h2 class="text-4xl font-extrabold text-center mb-12 text-blue-600 tracking-wide">Gesticket</h2>
+        <ul class="space-y-2 text-base font-semibold">
 
-              <span id="userManagementDropdown" class="flex items-center gap-2 ">
-                <i class="fa-solid fa-users"></i>
-                <span href="#" class="block">
-                  Utilisateurs
-                </span>
-                <i class="fa-solid fa-chevron-down" id="userManagementChevronDown"></i>
-              </span>
-
-              <ul id="userManagementDropdownContent"
-                class="dropdownLinks hidden absolute top-full right-0 bg-white text-black w-full shadow-md">
-                <li>
-                  <a href="{{ route('list-users') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    Liste des utilisateurs
-                  </a>
-                </li>
-                <li>
-                  <a href="{{ route('create-user') }}" class="block px-4 py-2 hover:bg-gray-100">
-                    Créer un utilisateur
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li
-              class="cursor-pointer block px-7 py-3.5
-              {{ request()->route()->getName() === 'list-statuts' || request()->route()->getName() === 'edit-statut'
-                  ? 'bg-white text-black'
-                  : 'hover:bg-[#3A4248] hover:text-white' }}">
-
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-gears"></i>
-                <a href="{{ route('list-statuts') }}" class="block">
-                  Statuts
-                </a>
-              </span>
-
-            </li>
-            <li
-              class="cursor-pointer block px-7 py-3.5
-              {{ request()->route()->getName() === 'list-priorites' || request()->route()->getName() === 'edit-priorite'
-                  ? 'bg-white text-black'
-                  : 'hover:bg-[#3A4248] hover:text-white' }}">
-
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-gears"></i>
-                <a href="{{ route('list-priorites') }}" class="block">
-                  Priorités
-                </a>
-              </span>
-
-            </li>
-            <li
-              class="cursor-pointer block px-7 py-3.5
-              {{ request()->route()->getName() === 'list-categories' || request()->route()->getName() === 'edit-categorie'
-                  ? 'bg-white text-black'
-                  : 'hover:bg-[#3A4248] hover:text-white' }}">
-
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-tags"></i>
-                <a href="{{ route('list-categories') }}" class="block">
-                  Catégories
-                </a>
-              </span>
-            </li>
-            <li
-              class="cursor-pointer block px-7 py-3.5
-            {{ request()->route()->getName() === 'list-all-tickets' ||
-            request()->route()->getName() === 'search-all-tickets' ||
-            request()->route()->getName() === 'edit-ticket' ||
-            request()->route()->getName() === 'show-ticket'
-                ? 'bg-white text-black'
-                : 'hover:bg-[#3A4248] hover:text-white' }}">
-              <span class="flex items-center gap-2">
-                <i class="fa-solid fa-circle-question"></i>
-                <a href="{{ route('list-all-tickets') }}" class="block">
-                  Tickets
-                </a>
-              </span>
-            </li>
-          </ul>
-        </div>
-        <ul class="text-lg font-medium">
+          <!-- Tableau de bord -->
           <li
-            class="cursor-pointer block px-7 py-3.5
-          {{ request()->route()->getName() === 'profile' ? 'bg-white text-black' : 'hover:bg-[#3A4248] hover:text-white' }}">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-user"></i>
-              <a href="{{ route('profile') }}" class="block">
-                Profile
-              </a>
-            </span>
+            class="px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-blue-100 hover:text-blue-700
+            {{ request()->route()->getName() === 'admin-dashboard' ? 'bg-blue-200 text-blue-800' : '' }}">
+            <a href="{{ route('admin-dashboard') }}" class="flex items-center gap-3">
+              <i class="fa-solid fa-house fa-lg"></i>
+              <span>Tableau de bord</span>
+            </a>
           </li>
-          <li class="cursor-pointer block px-7 py-3.5 hover:bg-[#3A4248] hover:text-white">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-right-from-bracket"></i>
-              <a href="{{ route('logout') }}" class="block">
-                Se déconnecter
-              </a>
-            </span>
+
+          <!-- Utilisateurs -->
+          <li
+            class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-purple-100 hover:text-purple-700
+            {{ (request()->route()->getName() === 'list-users' || request()->route()->getName() === 'create-user') ? 'bg-purple-200 text-purple-800' : '' }}">
+            <div id="userManagementDropdown" tabindex="0" role="button"
+              class="flex items-center gap-3 select-none">
+              <i class="fa-solid fa-users fa-lg"></i>
+              <span>Utilisateurs</span>
+              <i id="userManagementChevronDown"
+                class="fa-solid fa-chevron-down ml-auto transition-transform duration-300 text-gray-400"></i>
+            </div>
+            <ul id="userManagementDropdownContent"
+              class="hidden absolute top-full right-0 w-full bg-white text-gray-700 rounded-b-lg shadow-md z-20 border border-t-0 border-gray-200">
+              <li><a href="{{ route('list-users') }}" class="block px-6 py-2 hover:bg-gray-100">Liste des utilisateurs</a></li>
+              <li><a href="{{ route('create-user') }}" class="block px-6 py-2 hover:bg-gray-100">Créer un utilisateur</a></li>
+            </ul>
+          </li>
+
+          <!-- Produits -->
+          <li
+            class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-pink-100 hover:text-pink-700
+            {{ (request()->route()->getName() === 'list-produits' || request()->route()->getName() === 'create-produit') ? 'bg-pink-200 text-pink-800' : '' }}">
+            <div id="produitDropdown" tabindex="0" role="button"
+              class="flex items-center gap-3 select-none">
+              <i class="fa-solid fa-id-card fa-lg"></i>
+              <span>Produits</span>
+              <i id="produitChevronDown"
+                class="fa-solid fa-chevron-down ml-auto transition-transform duration-300 text-gray-400"></i>
+            </div>
+            <ul id="produitDropdownContent"
+              class="hidden absolute top-full right-0 w-full bg-white text-gray-700 rounded-b-lg shadow-md z-20 border border-t-0 border-gray-200">
+              <li><a href="{{ route('list-produits') }}" class="block px-6 py-2 hover:bg-gray-100">Liste des produits</a></li>
+              <li><a href="{{ route('create-produit') }}" class="block px-6 py-2 hover:bg-gray-100">Créer un produit</a></li>
+            </ul>
+          </li>
+
+          <!-- Abonnement -->
+          <li
+            class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-green-100 hover:text-green-700
+            {{ (request()->route()->getName() === 'list-abonnements' || request()->route()->getName() === 'create-abonnement') ? 'bg-green-200 text-green-800' : '' }}">
+            <div id="abonnementDropdown" tabindex="0" role="button"
+              class="flex items-center gap-3 select-none">
+              <i class="fa-solid fa-money-check-alt fa-lg"></i>
+              <span>Abonnement</span>
+              <i id="abonnementChevronDown"
+                class="fa-solid fa-chevron-down ml-auto transition-transform duration-300 text-gray-400"></i>
+            </div>
+            <ul id="abonnementDropdownContent"
+              class="hidden absolute top-full right-0 w-full bg-white text-gray-700 rounded-b-lg shadow-md z-20 border border-t-0 border-gray-200">
+              <li><a href="{{ route('list-abonnements') }}" class="block px-6 py-2 hover:bg-gray-100">Liste des abonnements</a></li>
+              <li><a href="{{ route('create-abonnement') }}" class="block px-6 py-2 hover:bg-gray-100">Créer un abonnement</a></li>
+            </ul>
+          </li>
+
+          <!-- SLA -->
+          <li
+            class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-yellow-100 hover:text-yellow-700
+            {{ (request()->route()->getName() === 'liste-slas' || request()->route()->getName() === 'create-sla') ? 'bg-yellow-200 text-yellow-800' : '' }}">
+            <div id="slaDropdown" tabindex="0" role="button"
+              class="flex items-center gap-3 select-none">
+              <i class="fa-solid fa-money-check-alt fa-lg"></i>
+              <span>SLA</span>
+              <i id="slaChevronDown"
+                class="fa-solid fa-chevron-down ml-auto transition-transform duration-300 text-gray-400"></i>
+            </div>
+            <ul id="slaDropdownContent"
+              class="hidden absolute top-full right-0 w-full bg-white text-gray-700 rounded-b-lg shadow-md z-20 border border-t-0 border-gray-200">
+              <li><a href="{{ route('list-slas') }}" class="block px-6 py-2 hover:bg-gray-100">Liste des SLAs</a></li>
+              <li><a href="{{ route('create-sla') }}" class="block px-6 py-2 hover:bg-gray-100">Créer un SLA</a></li>
+            </ul>
+          </li>
+
+          <!-- Tickets -->
+          <li
+            class="px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+            hover:bg-cyan-100 hover:text-cyan-700
+            {{ in_array(request()->route()->getName(), ['list-all-tickets', 'search-all-tickets', 'edit-ticket', 'show-ticket']) ? 'bg-cyan-200 text-cyan-800' : '' }}">
+            <a href="{{ route('list-all-tickets') }}" class="flex items-center gap-3">
+              <i class="fa-solid fa-circle-question fa-lg"></i>
+              <span>Tickets</span>
+            </a>
           </li>
         </ul>
-
       </div>
-    </div>
-    <div class="w-[80%] h-full overflow-y-scroll">
+
+      <!-- Footer -->
+      <ul class="text-base font-semibold text-gray-500 border-t border-gray-200 pt-6 mx-8 space-y-2">
+        <li
+          class="cursor-pointer rounded-lg px-5 py-3 hover:bg-gray-200 hover:text-gray-700 transition-colors
+          {{ request()->route()->getName() === 'profile' ? 'bg-gray-300 text-gray-800' : '' }}">
+          <a href="{{ route('profile') }}" class="flex items-center gap-3">
+            <i class="fa-solid fa-user fa-lg"></i>
+            Profile
+          </a>
+        </li>
+        <li
+          class="cursor-pointer rounded-lg px-5 py-3 hover:bg-gray-200 hover:text-gray-700 transition-colors">
+          <a href="{{ route('logout') }}" class="flex items-center gap-3">
+            <i class="fa-solid fa-right-from-bracket fa-lg"></i>
+            Se déconnecter
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Content Area -->
+    <main class="w-4/5 h-full overflow-y-auto p-8 bg-white">
       @yield('content')
-    </div>
+    </main>
   </div>
 
-
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      let userDropdown = document.getElementById('userManagementDropdown');
-      let userDropdownContent = document.getElementById('userManagementDropdownContent');
-      let userChevronDown = document.getElementById('userManagementChevronDown');
-
-      userDropdown.addEventListener('click', function(event) {
-        event.stopPropagation();
-        userDropdownContent.classList.toggle('hidden');
-        userChevronDown.classList.toggle('rotate-180');
-      });
-
-      document.addEventListener('click', function(event) {
-        userDropdownContent.classList.add('hidden');
-        userChevronDown.classList.remove('rotate-180');
+    document.addEventListener('DOMContentLoaded', function () {
+      function setupDropdown(toggleId, contentId, chevronId) {
+        const toggle = document.getElementById(toggleId);
+        const content = document.getElementById(contentId);
+        const chevron = document.getElementById(chevronId);
+  
+        toggle.addEventListener('click', function (event) {
+          event.stopPropagation();
+          content.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        });
+      }
+  
+      setupDropdown('userManagementDropdown', 'userManagementDropdownContent', 'userManagementChevronDown');
+      setupDropdown('produitDropdown', 'produitDropdownContent', 'produitChevronDown');
+      setupDropdown('abonnementDropdown', 'abonnementDropdownContent', 'abonnementChevronDown');
+      setupDropdown('slaDropdown', 'slaDropdownContent', 'slaChevronDown');
+  
+      // Clic ailleurs ferme les dropdowns et remet la flèche dans l'état initial
+      document.addEventListener('click', function () {
+        document.querySelectorAll('#userManagementDropdownContent, #produitDropdownContent, #abonnementDropdownContent, #slaDropdownContent')
+          .forEach(dropdown => dropdown.classList.add('hidden'));
+        document.querySelectorAll('.fa-chevron-down').forEach(icon => icon.classList.remove('rotate-180'));
       });
     });
-
   </script>
-
-</body>
-
-</html>
+   </body> </html> ```

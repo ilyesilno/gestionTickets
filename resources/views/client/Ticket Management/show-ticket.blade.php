@@ -1,4 +1,4 @@
-@extends('layout.employe-layout')
+@extends('layout.client-layout')
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -67,7 +67,7 @@
               Statut
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getStatut('statut_id') }}
+              {{ $ticket->statut }}
             </td>
           </tr>
           <tr>
@@ -76,7 +76,7 @@
               Priorite
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getPriorite('priorite_id') }}
+              {{ $ticket->priorite }}
             </td>
           </tr>
           <tr>
@@ -85,7 +85,7 @@
               Categorie
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getCategorie('categorie_id') }}
+              {{ $ticket->categorie }}
             </td>
           </tr>
 
@@ -110,13 +110,7 @@
                     <span class="text-gray-500 font-semibold uppercase flex gap-2">
                       <span>Par : {{ $commentaire->getUser('user_id') }}</span>
                       <span>({{ $commentaire->created_at }})</span>
-                      @if ($commentaire->user_id === auth()->id())
-                        <form action="{{ route('employe-delete-comment', ['id' => $commentaire->id]) }}" method="POST">
-                          @csrf
-                          @method('delete')
-                          <input type="submit" class="underline text-red-500 uppercase cursor-pointer" value="delete">
-                        </form>
-                      @endif
+                      
 
                     </span>
                     <p class="text-gray-700">{{ $commentaire->commentaire }}</p>
@@ -143,7 +137,7 @@
     <div class="modal-content relative bg-white shadow-md mx-auto my-20 w-96 p-6 rounded-lg">
       <span class="close text-3xl absolute top-0 right-0 mt-2 mr-4 text-gray-900 cursor-pointer">&times;</span>
       <h2 class="text-xl font-bold mb-4">Créer un nouveau comment</h2>
-      <form id="createCommentForm" action="{{ route('employe-store-comment', ['id' => $ticket->id]) }}" method="POST">
+      <form id="createCommentForm" action="{{ route('client-store-comment', ['id' => $ticket->id]) }}" method="POST">
         @csrf
         <div class="mb-4">
           <label for="commentaire" class="block mb-2 text-sm font-medium text-gray-900">Nom du comment :</label>

@@ -21,9 +21,9 @@ class RedirectBasedOnRole
                 case 1:
                     return redirect('/admin-dashboard');
                 case 2:
-                    return redirect('/technicien-dashboard');
+                    return redirect('/agent-dashboard');
                 case 3:
-                    return redirect('/employe-dashboard');
+                    return redirect('/client-dashboard');
                 default:
                     return redirect('/login');
             }

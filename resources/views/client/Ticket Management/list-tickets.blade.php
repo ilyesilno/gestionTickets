@@ -1,9 +1,9 @@
 @php
-  $statutColor = [
-      'Créer' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
-      'En Cours' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
-      'Fermé' => ['bg-[#F86C6B]', 'text-[#92231A]'],
-      'Problème' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
+   $statutColor = [
+      'open' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
+      'process' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
+      'resolved' => ['bg-[#F86C6B]', 'text-[#92231A]'],
+      'closed' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
   ];
 
   $prioriteColor = [
@@ -13,7 +13,7 @@
   ];
 
 @endphp
-@extends('layout.employe-layout')
+@extends('layout.client-layout')
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -35,7 +35,7 @@
             ticket</button>
         </div>
         <div class="header flex items-center justify-end">
-          <form action="{{ route('search-employe-tickets') }}" method="GET"
+          <form action="{{ route('search-client-tickets') }}" method="GET"
             class="flex justify-between items-center p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50">
             @csrf
             <input type="text" name="search" placeholder="Search tickets..."
@@ -69,6 +69,10 @@
               </th>
               <th scope="col"
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
+                Niveau support
+              </th>
+              <th scope="col"
+                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
                 Attribué à
               </th>
               <th scope="col"
@@ -81,55 +85,54 @@
             @foreach ($tickets as $ticket)
               <tr>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-employe-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-client-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
                     {{ Str::limit($ticket->sujet, 15) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-employe-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-client-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
                     {{ Str::limit($ticket->description, 20) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($statutColor[$ticket->getStatut('status_id')])
-                        ? $statutColor[$ticket->getStatut('status_id')][0] .
+                    class="{{ isset($statutColor[$ticket->statut])
+                        ? $statutColor[$ticket->statut][0] .
                             ' ' .
-                            $statutColor[$ticket->getStatut('status_id')][1] .
+                            $statutColor[$ticket->statut][1] .
                             ' rounded-lg px-2 py-1 font-semibold text-nowrap'
                         : '' }}">
-                    {{ $ticket->getStatut('status_id') }}
+                    {{ $ticket->statut }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($prioriteColor[$ticket->getPriorite('priorite_id')])
-                        ? $prioriteColor[$ticket->getPriorite('priorite_id')][0] .
+                    class="">
+                    {{ $ticket->support_level }}
+                  </span>
+                </td>
+                <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
+                  <span
+                    class="{{ isset($prioriteColor[$ticket->priorite])
+                        ? $prioriteColor[$ticket->priorite][0] .
                             ' ' .
-                            $prioriteColor[$ticket->getPriorite('priorite_id')][1] .
+                            $prioriteColor[$ticket->priorite][1] .
                             ' rounded-lg px-2 py-1 font-semibold'
                         : '' }}">
-                    {{ $ticket->getPriorite('priorite_id') }}
+                    {{ $ticket->priorite }}
                   </span>
 
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $ticket->getCategorie('categorie_id') }}
+                  {{ $ticket->categorie }}
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $ticket->getAssignedTo('assigned_to') }}
                 </td>
                 <td
                   class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
-                  <a href="{{ route('edit-employe-ticket', ['id' => $ticket->id]) }}"
+                  <a href="{{ route('edit-client-ticket', ['id' => $ticket->id]) }}"
                     class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Edit</a>
-                  <form action="{{ route('delete-employe-ticket', ['id' => $ticket->id]) }}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button type="submit" class="text-white text-base font-medium px-5 bg-[#DC3544] rounded-lg">
-                      Delete
-                    </button>
-                  </form>
                 </td>
               </tr>
             @endforeach
@@ -167,32 +170,30 @@
         </div>
         <div class="mb-3">
           <label for="priorite_id" class="block mb-2 text-sm font-medium text-gray-900">Priorite</label>
-          <select name="priorite_id"
+          <select name="priorite"
             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
             <option disabled selected>Selectionner une priorité</option>
-            @foreach ($priorites as $priorite)
-              <option value="{{ $priorite->id }}">{{ $priorite->nom }}
+              <option value="basse">Basse
               </option>
-            @endforeach
+              <option value="basse">Moyenne
+              </option>
+              <option value="basse">Haute
+              </option>
           </select>
-          @error('priorite_id')
-            <span>{{ $message }}</span>
-          @enderror
+          
         </div>
         <div class="mb-3">
           <label for="categorie_id" class="block mb-2 text-sm font-medium text-gray-900">Categorie</label>
-          <select name="categorie_id"
+          <select name="categorie"
             class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
             <option disabled selected>Selectionner une catégorie</option>
-            @foreach ($categories as $categorie)
-              <option value="{{ $categorie->id }}">
-                {{ $categorie->nom }}
+              <option value="bug">
+                Bug
               </option>
-            @endforeach
+              <option value="question">
+                Question
+              </option>
           </select>
-          @error('categorie_id')
-            <span>{{ $message }}</span>
-          @enderror
         </div>
         <button type="submit"
           class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">

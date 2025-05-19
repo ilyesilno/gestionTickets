@@ -22,9 +22,6 @@ class DatabaseSeeder extends Seeder
             'nom' => 'admin'
         ]);
 
-        Role::factory()->create([
-            'nom' => 'responsable'
-        ]);
 
         Role::factory()->create([
             'nom' => 'agent'
@@ -46,18 +43,12 @@ class DatabaseSeeder extends Seeder
             'role_id'=> 1
         ]);
 
-        User::factory()->create([
-            'nom_complet' => 'responsable',
-            'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make('password123'),
-            'role_id'=> 2
-        ]);
 
         User::factory()->create([
             'nom_complet' => 'client',
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password123'),
-            'role_id'=> 4
+            'role_id'=> 3
         ]);
         
 //Users of type agents
@@ -65,11 +56,11 @@ class DatabaseSeeder extends Seeder
             'nom_complet' => 'agent n1',
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password123'),
-            'role_id'=> 3
+            'role_id'=> 2
         ]);
 
         Agent::factory()->create([
-            'user_id' => 4,
+            'user_id' => 3,
             'support_level'=> 1
         ]);
 
@@ -77,11 +68,11 @@ class DatabaseSeeder extends Seeder
             'nom_complet' => 'agent n2',
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password123'),
-            'role_id'=> 3
+            'role_id'=> 2
         ]);
 
         Agent::factory()->create([
-            'user_id' => 5,
+            'user_id' => 4,
             'support_level'=> 2
         ]);
 
@@ -89,11 +80,11 @@ class DatabaseSeeder extends Seeder
             'nom_complet' => 'agent n3',
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password123'),
-            'role_id'=> 3
+            'role_id'=> 2
         ]);
 
         Agent::factory()->create([
-            'user_id' => 6,
+            'user_id' => 5,
             'support_level'=> 3
         ]);
 

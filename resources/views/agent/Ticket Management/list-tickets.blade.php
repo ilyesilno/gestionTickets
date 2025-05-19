@@ -13,7 +13,7 @@
   ];
 
 @endphp
-@extends('layout.technicien-layout')
+@extends('layout.agent-layout')
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -30,7 +30,7 @@
       <div class="list-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
           <h1 class="text-2xl font-medium ">List Tickets</h1>
-          <form action="{{ route('search-tech-tickets') }}" method="GET"
+          <form action="{{ route('search-agent-tickets') }}" method="GET"
             class="flex justify-between items-center p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50">
             @csrf
             <input type="text" name="search" placeholder="Search tickets..." class="bg-gray-50 outline-none text-sm ml-4"
@@ -77,50 +77,61 @@
             @foreach ($tickets as $ticket)
               <tr>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-tech-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-agent-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
                     {{ Str::limit($ticket->sujet, 15) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-tech-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-agent-ticket', ['id' => $ticket->id]) }}" class="hover:underline">
                     {{ Str::limit($ticket->description, 20) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($statutColor[$ticket->getStatut('status_id')])
-                        ? $statutColor[$ticket->getStatut('status_id')][0] .
+                    class="{{ isset($statutColor[$ticket->statut])
+                        ? $statutColor[$ticket->statut][0] .
                             ' ' .
-                            $statutColor[$ticket->getStatut('status_id')][1] .
+                            $statutColor[$ticket->statut][1] .
                             ' rounded-lg px-2 py-1 font-semibold text-nowrap'
                         : '' }}">
-                    {{ $ticket->getStatut('status_id') }}
+                    {{ $ticket->statut }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($prioriteColor[$ticket->getPriorite('priorite_id')])
-                        ? $prioriteColor[$ticket->getPriorite('priorite_id')][0] .
+                    class="{{ isset($prioriteColor[$ticket->priorite])
+                        ? $prioriteColor[$ticket->priorite][0] .
                             ' ' .
-                            $prioriteColor[$ticket->getPriorite('priorite_id')][1] .
+                            $prioriteColor[$ticket->priorite][1] .
                             ' rounded-lg px-2 py-1 font-semibold'
                         : '' }}">
-                    {{ $ticket->getPriorite('priorite_id') }}
+                    {{ $ticket->priorite }}
                   </span>
 
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $ticket->getCategorie('categorie_id') }}
+                  {{ $ticket->categorie }}
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $ticket->getUser('user_id') }}
                 </td>
-                <td
+                @if(!isset($ticket->assigned_to) && $ticket->statut != 'resolu')
+
+                {{-- <td
                   class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
-                  <a href="{{ route('edit-tech-ticket', ['id' => $ticket->id]) }}"
+                  <a href="{{ route('edit-agent-ticket', ['id' => $ticket->id]) }}"
                     class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Edit</a>
                   </form>
+                </td> --}}
+                @endif
+                @if(!isset($ticket->assigned_to) && $ticket->statut != 'resolu')
+                <td
+                  class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
+                  <a href="{{ route('selfasign-agent-ticket', ['id' => $ticket->id]) }}"
+                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">prendre ticket</a>
+                  </form>
                 </td>
+                @endif
               </tr>
             @endforeach
           </tbody>

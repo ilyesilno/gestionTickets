@@ -19,7 +19,7 @@ class TicketFactory extends Factory
         return [
             'sujet' => fake()->text(50),
             'description' => fake()->paragraph(2),
-            'user_id' => 3,
+            'user_id' => 2,
             'priorite' => 'haute',
             'categorie' => 'bug',
             

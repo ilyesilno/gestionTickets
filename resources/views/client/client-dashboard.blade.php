@@ -1,9 +1,9 @@
 @php
-  $statutColor = [
-      'Créer' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
-      'En Cours' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
-      'Fermé' => ['bg-[#F86C6B]', 'text-[#92231A]'],
-      'Problème' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
+    $statutColor = [
+      'open' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
+      'process' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
+      'resolved' => ['bg-[#F86C6B]', 'text-[#92231A]'],
+      'closed' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
   ];
 
   $prioriteColor = [
@@ -13,7 +13,7 @@
   ];
 
 @endphp
-@extends('layout.employe-layout')
+@extends('layout.client-layout')
 @section('content')
   @if (session()->has('warning'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-red-600 absolute right-1 top-1 m-2">
@@ -29,7 +29,7 @@
           </h1>
           <div class="relative">
             <button type="button" id="notifBtn"
-              class="w-12 h-12 flex items-center justify-center rounded-full text-white text-sm font-semibold border-none outline-none bg-gray-600 hover:bg-gray-700 active:bg-gray-600">
+              class="w-12 h-12 flex items-center justify-center rounded-full text-white text-sm font-semibold border-none outline-none bg-gray-600 hover:bg-gray-700 active:bg-gray-600"> {{ $notifications->where('markAsread',false)->count() }} &nbsp;
               <svg xmlns="http://www.w3.org/2000/svg" width="20px" class="cursor-pointer fill-[#fff]"
                 viewBox="0 0 371.263 371.263">
                 <path
@@ -40,13 +40,13 @@
             <div id="notifications"
               class='absolute right-0 shadow-lg bg-white py-2 z-[1000] min-w-full rounded-lg w-[410px] max-h-[500px] overflow-auto hidden'>
               <div class="flex items-center justify-between my-4 px-4">
-                <form action="{{ route('employe-tout-effacer') }}" method="post">
+                <form action="{{ route('client-tout-effacer') }}" method="post">
                   @csrf
                   @method('delete')
                   <input type="submit" class="text-xs text-gray-500 cursor-pointer" value="Tout effacer" />
                 </form>
 
-                <form action="{{ route('employe-markAllAsRead') }}" method="post">
+                <form action="{{ route('client-markAllAsRead') }}" method="post">
                   @csrf
                   <input type="submit" class="text-xs text-gray-500 cursor-pointer" value="Tout marquer comme lu" />
                 </form>
@@ -55,7 +55,7 @@
                 @foreach ($notifications as $notification)
                   <li
                     class='py-4 px-4 hover:bg-gray-50 text-black text-sm cursor-pointer @if (!$notification->markAsRead) bg-gray-100 @endif'>
-                    <a href="{{ route('show-employe-ticket', ['id' => $notification->ticket_id]) }}"
+                    <a href="{{ route('show-client-ticket', ['id' => $notification->ticket_id]) }}"
                       class=" flex items-center justify-between">
                       <div class="notif flex gap-3 items-center">
                         <div
@@ -66,7 +66,7 @@
                           <p class="text-xs text-gray-500 leading-3 mt-2">{{ $notification->created_at }}</p>
                         </div>
                       </div>
-                      <form action="{{ route('employe-markAsRead', ['id' => $notification->id]) }}" method="post">
+                      <form action="{{ route('client-markAsRead', ['id' => $notification->id]) }}" method="post">
                         @csrf
                         <input type="submit" class="text-xs text-gray-500 cursor-pointer" value="Marquer comme lu" />
                       </form>
@@ -82,44 +82,41 @@
         <div class="cards grid grid-cols-4 gap-4">
           <div class="card bg-[#4DBD75] p-7 border border-[#389457] rounded-lg">
             <div class="number text-xl text-white font-medium">
-              {{ $tickets->where('statut_id', 1)->count() }}
+              {{ $tickets->where('statut', 'ouvert')->count() }}
             </div>
             <div class="text text-xl text-white font-medium">
-              Tickets {{ $statuts->where('id', 1)->first()->nom }}
+              Tickets ouverts
             </div>
           </div>
 
-          <div class="card bg-[#20A8D8] p-7 border border-[#177EA1] rounded-lg">
-            <div class="number text-xl text-white font-medium">
-              {{ $tickets->whereNotNull('assigned_to')->count() }}
-            </div>
-            <div class="text text-xl text-white font-medium">
-              Tickets Attribués
-            </div>
-          </div>
 
-          <div class="card bg-[#F86C6B] p-7 border border-[#F6302E] rounded-lg">
+          {{-- <div class="card bg-[#F86C6B] p-7 border border-[#F6302E] rounded-lg">
             <div class="number text-xl text-white font-medium">
-              {{ $tickets->where('statut_id', 3)->count() }}
+              {{ $tickets->where('statut', 'process')->count() }}
             </div>
             <div class="text text-xl text-white font-medium">
-              Tickets {{ $statuts->where('id', 3)->first()->nom }}
+              Tickets en traitement
             </div>
-          </div>
+          </div> --}}
 
           <div class="card bg-[#F8991D] p-7 border border-[#795627] rounded-lg">
             <div class="number text-xl text-white font-medium">
-              {{ $tickets->where('statut_id', 4)->count() }}
+              {{ $tickets->where('statut', 'resolu')->count() }}
             </div>
             <div class="text text-xl text-white font-medium">
-              Tickets {{ $statuts->where('id', 4)->first()->nom }}
+              Tickets a ferme
             </div>
           </div>
         </div>
 
       </div>
       <div class="recent-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
-        <h1 class="text-2xl font-medium">Tickets Attribués Récemment</h1>
+        <div class="header flex items-center justify-between">
+        <h1 class="text-2xl font-medium">Mes tickets</h1>
+        <button id="openCreerTicketModalBtn"
+            class="py-2 px-4 bg-sky-500 text-white font-medium rounded-md hover:shadow-md">Ajouter un
+            ticket</button>
+        </div>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -147,56 +144,66 @@
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
                 Attribué à
               </th>
+              <th scope="col"
+                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
+                Niveau support
+              </th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($lastTickets->take(2) as $lastTicket)
+            @foreach ($lastTickets->take(5) as $lastTicket)
               <tr>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-employe-ticket', ['id' => $lastTicket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-client-ticket', ['id' => $lastTicket->id]) }}" class="hover:underline">
                     {{ Str::limit($lastTicket->sujet, 15) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <a href="{{ route('show-employe-ticket', ['id' => $lastTicket->id]) }}" class="hover:underline">
+                  <a href="{{ route('show-client-ticket', ['id' => $lastTicket->id]) }}" class="hover:underline">
                     {{ Str::limit($lastTicket->description, 20) }}
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span></span><span
-                    class="{{ isset($statutColor[$lastTicket->getStatut('status_id')])
-                        ? $statutColor[$lastTicket->getStatut('status_id')][0] .
+                    class="{{ isset($statutColor[$lastTicket->statut])
+                        ? $statutColor[$lastTicket->statut][0] .
                             ' ' .
-                            $statutColor[$lastTicket->getStatut('status_id')][1] .
+                            $statutColor[$lastTicket->statut][1] .
                             ' rounded-lg px-2 py-1 font-semibold text-nowrap'
                         : '' }}">
-                    {{ $lastTicket->getStatut('status_id') }}
+                    {{ $lastTicket->statut }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($prioriteColor[$lastTicket->getPriorite('priorite_id')])
-                        ? $prioriteColor[$lastTicket->getPriorite('priorite_id')][0] .
+                    class="{{ isset($prioriteColor[$lastTicket->priorite])
+                        ? $prioriteColor[$lastTicket->priorite][0] .
                             ' ' .
-                            $prioriteColor[$lastTicket->getPriorite('priorite_id')][1] .
+                            $prioriteColor[$lastTicket->priorite][1] .
                             ' rounded-lg px-2 py-1 font-semibold'
                         : '' }}">
-                    {{ $lastTicket->getPriorite('priorite_id') }}
+                    {{ $lastTicket->priorite }}
                   </span>
 
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $lastTicket->getCategorie('categorie_id') }}
+                  {{ $lastTicket->categorie }}
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $lastTicket->getAssignedTo('assigned_to') }}
+                </td>
+                <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
+                  <span
+                    class="">
+                    N{{ $lastTicket->support_level }}
+                  </span>
                 </td>
               </tr>
             @endforeach
           </tbody>
         </table>
         <div class="flex justify-end mt-2">
-          <a href="{{ route('employe-list-tickets') }}"
+          <a href="{{ route('client-list-tickets') }}"
             class="py-2 px-4 bg-black text-white font-medium rounded-md hover:shadow-md">
             Afficher tout
           </a>

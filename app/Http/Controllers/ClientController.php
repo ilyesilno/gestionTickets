@@ -12,59 +12,55 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class EmployeController extends Controller
+class ClientController extends Controller
 {
     public function dashboard()
     {
         $tickets = Ticket::where('user_id', auth()->id())->get();
         $lastTickets = Ticket::where('user_id', auth()->id())
-            ->where('assigned_to', '!=', null)
             ->orderBy('updated_at', 'desc')->get();
-        $statuts = Statut::all();
         $notifications = Notification::whereHas('ticket', function ($query) use ($tickets) {
             $query->whereIn('id', $tickets->pluck('id'));
         })->orderBy('created_at', 'DESC')->get();
-        return view('employe.employe-dashboard', compact('tickets', 'lastTickets', 'statuts', 'notifications'));
+        return view('client.client-dashboard', compact('tickets', 'lastTickets', 'notifications'));
     }
     public function listTickets()
     {
         $tickets = Ticket::where('user_id', auth()->id())->paginate(5);
-        $statuts = Statut::all();
-        $priorites = Priorite::all();
-        $categories = Categorie::all();
-        return view('employe.Ticket Management.list-tickets', compact('tickets', 'statuts', 'priorites', 'categories'));
+ 
+        return view('client.Ticket Management.list-tickets', compact('tickets', ));
     }
     public function storeTicket(Request $request)
     {
+
+
         $validatedData = $request->validate([
             'sujet' => 'required|string',
             'description' => 'required|string',
-            'priorite_id' => 'required|string',
-            'categorie_id' => 'required|string',
+            'priorite' => 'required|string',
+            'categorie' => 'required|string',
         ]);
+
+        
         Ticket::create([
             'sujet' => $validatedData["sujet"],
             'description' => $validatedData["description"],
             'user_id' => auth()->id(),
-            'priorite_id' => $validatedData["priorite_id"],
-            'statut_id' => 1,
-            'categorie_id' => $validatedData["categorie_id"],
+            'priorite' => $validatedData["priorite"],
+            'categorie' => $validatedData["categorie"],
         ]);
-        return redirect()->route('employe-list-tickets')->with("success", "Le ticket a été ajouté avec succès");
+        return redirect()->route('client-list-tickets')->with("success", "Le ticket a été ajouté avec succès");
     }
     public function afficherTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
         $commentaires = Commentaire::where('ticket_id', $id)->get();
-        return view('employe.Ticket Management.show-ticket', compact('ticket', 'commentaires'));
+        return view('client.Ticket Management.show-ticket', compact('ticket', 'commentaires'));
     }
     public function editTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
-        $statuts = Statut::all();
-        $priorites = Priorite::all();
-        $categories = Categorie::all();
-        return view('employe.Ticket Management.edit-ticket', compact('ticket', 'statuts', 'priorites', 'categories'));
+        return view('client.Ticket Management.edit-ticket', compact('ticket', ));
     }
     public function updateTicket(Request $request, $id)
     {
@@ -73,14 +69,12 @@ class EmployeController extends Controller
         $validatedData = $request->validate([
             'sujet' => 'required|string',
             'description' => 'required|string',
-            'priorite_id' => 'required',
-            'statut_id' => 'required',
-            'categorie_id' => 'required',
+           
         ]);
 
         $ticket->update($validatedData);
 
-        return redirect()->route('employe-list-tickets')->with("success", "Le ticket a été modifié avec succès");
+        return redirect()->route('client-list-tickets')->with("success", "Le ticket a été modifié avec succès");
     }
     public function deleteTicket($id)
     {
@@ -90,20 +84,18 @@ class EmployeController extends Controller
 
         return back()->with('warning', 'Le ticket a été supprimé');
     }
-    public function employeSearch(Request $request)
+    public function clientSearch(Request $request)
     {
         $search = $request->input('search');
         $tickets = Ticket::where('user_id', auth()->id())
             ->where('sujet', 'like', '%' . $search . '%')
             ->paginate(5);
-        $statuts = Statut::all();
-        $priorites = Priorite::all();
-        $categories = Categorie::all();
-        return view('employe.Ticket Management.list-tickets', compact('tickets', 'statuts', 'priorites', 'categories'));
+
+        return view('client.Ticket Management.list-tickets', compact('tickets', ));
     }
 
     //! Comment Management
-    public function storeEmployeComment(Request $request, $id)
+    public function storeclientComment(Request $request, $id)
     {
         $validatedData = $request->validate([
             'commentaire' => 'required|string',
@@ -115,7 +107,7 @@ class EmployeController extends Controller
         ]);
         return back()->with('success', 'Le commentaire a été ajouté');
     }
-    public function deleteEmployeComment($id)
+    public function deleteclientComment($id)
     {
         $commentaire = Commentaire::where('id', $id)->first();
         $commentaire->delete();
@@ -128,7 +120,7 @@ class EmployeController extends Controller
         $notification->markAsRead = true;
         $notification->save();
 
-        return redirect()->route('employe-dashboard')->with('success', 'Notification marquée comme lue avec succès.');
+        return redirect()->route('client-dashboard')->with('success', 'Notification marquée comme lue avec succès.');
     }
     public function markAllAsRead()
     {
@@ -143,7 +135,7 @@ class EmployeController extends Controller
             $notification->save();
         }
 
-        return redirect()->route('employe-dashboard')->with('success', 'Notifications marquées comme lues avec succès.');
+        return redirect()->route('client-dashboard')->with('success', 'Notifications marquées comme lues avec succès.');
     }
 
     public function toutEffacer()
@@ -157,7 +149,7 @@ class EmployeController extends Controller
             foreach ($notifications as $notification) {
                 $notification->delete();
             }
-            return redirect()->route('employe-dashboard')->with('success', 'Toutes les notifications ont été effacées avec succès');
+            return redirect()->route('client-dashboard')->with('success', 'Toutes les notifications ont été effacées avec succès');
         } else {
             return back()->with("warning", "Vous n'avez pas de notification à effacer");
         }
@@ -168,7 +160,7 @@ class EmployeController extends Controller
     public function profile()
     {
         $currentUser = auth()->user();
-        return view('employe.profile', compact('currentUser'));
+        return view('client.profile', compact('currentUser'));
     }
     public function updateInfo(Request $request)
     {
@@ -179,8 +171,8 @@ class EmployeController extends Controller
         $user = Auth::user();
         $user->nom_complet = $validatedData['nom_complet'];
         $user->email = $validatedData['email'];
-        $user->save();
-        return redirect()->route('employe-profile')->with('success', 'Your profile info has been updated');
+        $user->User::save();
+        return redirect()->route('client-profile')->with('success', 'Your profile info has been updated');
     }
     public function changePassword(Request $request)
     {
@@ -196,8 +188,8 @@ class EmployeController extends Controller
         }
 
         $user->password = Hash::make($request->new_password);
-        $user->save();
+        $user->User::save();
 
-        return redirect()->route('employe-profile')->with('success', 'Your password has been updated');
+        return redirect()->route('client-profile')->with('success', 'Your password has been updated');
     }
 }

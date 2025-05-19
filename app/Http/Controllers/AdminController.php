@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Mail\TicketAttribuer;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Statut;
+use App\Models\abonnement;
 use App\Models\Ticket;
-use App\Models\Priorite;
-use App\Models\Categorie;
+use App\Models\Produit;
+use App\Models\Sla;
 use App\Models\Commentaire;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -25,6 +25,121 @@ class AdminController extends Controller
         $tickets = Ticket::all();
         return view('admin.admin-dashboard', compact('tickets'));
     }
+     //!/* sla Management */
+
+     public function listslas()
+     {
+         $currentUserId = Auth::id();
+         $slas = sla::paginate(5); // Automatically paginates
+     
+         return view('admin.Sla Management.liste-sla', compact('slas'));
+     }
+     public function createsla()
+     {   
+         return view('admin.Sla Management.create-sla');
+     }
+     public function storesla(Request $request)
+     {
+         $validatedData = $request->validate([
+             'nom' => 'required|string',
+             'duree_qualification' => 'required|int',
+             'duree_resolution' => 'required|int'
+ 
+         ]); 
+         
+         sla::create([
+             'nom' => $validatedData['nom'],
+             'duree_qualification' => $validatedData['duree_qualification'],
+             'duree_resolution' => $validatedData['duree_resolution'],
+
+         ]);
+         return back()->with('success', 'Vous avez bien créé un sla');
+     }
+     public function deletesla($id)
+     {
+         $sla = sla::findOrFail($id);
+         $sla->delete();
+     
+         return redirect()->back()->with("warning", "Le sla a été supprimé avec succès");
+     }
+      //!/* produit Management */
+
+      public function listProduits()
+      {
+          $currentUserId = Auth::id();
+          $produits = Produit::paginate(5); // Automatically paginates
+      
+          return view('admin.Produit Management.list-produit', compact('produits'));
+      }
+      public function createproduit()
+      {   
+          $users = User::where('role_id', 3)->get();
+          return view('admin.Produit Management.create-produit',compact('users'));
+      }
+      public function storeproduit(Request $request)
+      {
+          $validatedData = $request->validate([
+              'nom' => 'required|string',
+              'prix' => 'required|integer|min:8',
+              'date_creation' => 'required|date'
+  
+          ]); 
+          
+          Produit::create([
+              'nom' => $validatedData['nom'],
+              'prix' => $validatedData['prix'],
+              'date_creation' => $validatedData['date_creation'],
+              'user_id' => $request->user_id,
+
+          ]);
+          return back()->with('success', 'Vous avez bien créé un compte');
+      }
+      public function deleteProduit($id)
+      { 
+          $produit = Produit::findOrFail($id);
+          $produit->delete();
+      
+          return redirect()->back()->with("warning", "Le compte a été supprimé avec succès");
+      }
+  //!/* abonnement Management */
+
+  public function listAbonnements()
+  {
+      $abonnements = Abonnement::paginate(10); 
+  
+      return view('admin.Abonnement Management.liste-abonnement',compact('abonnements'));
+  }
+  public function createAbonnement()
+  {
+      $slas = Sla::all();
+      $produits = Produit::all();
+      return view('admin.Abonnement Management.create-abonnement', compact('produits', 'slas'));
+  }
+  public function storeabonnement(Request $request)
+  {
+      $validatedData = $request->validate([
+          'date_debut' => 'required|date',
+          'date_fin' => 'required|date',
+          'status' => 'required|string',
+          'produitID' => 'required|integer',
+
+      ]);
+
+      abonnement::create([
+           'date_debut' => $validatedData['date_debut'],
+          'date_fin' => $validatedData['date_fin'],
+          'status' => $validatedData['status'],
+          'produitID' => $validatedData['produitID'],
+      ]);
+      return back()->with('success', 'Vous avez bien créé un abonnement');
+  }
+  public function deleteabonnement($id)
+  {
+      $abonnement = abonnement::findOrFail($id);
+      $abonnement->delete();
+  
+      return redirect()->back()->with("warning", "L'abonnement a été supprimé avec succès");
+  }
     //!/* User Management */
     public function createUser()
     {

@@ -1,4 +1,4 @@
-@extends('layout.technicien-layout')
+@extends('layout.agent-layout')
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -67,7 +67,7 @@
               Statut
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getStatut('statut_id') }}
+              {{ $ticket->statut}}
             </td>
           </tr>
           <tr>
@@ -76,7 +76,7 @@
               Priorite
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getPriorite('priorite_id') }}
+              {{ $ticket->priorite }}
             </td>
           </tr>
           <tr>
@@ -85,14 +85,16 @@
               Categorie
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getCategorie('categorie_id') }}
+              {{ $ticket->categorie }}
             </td>
           </tr>
+          @if($ticket->assigned_to == auth()->id())
           <tr class="relative">
             <th scope="col"
               class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider bg-gray-50">
               Commentaires
             </th>
+           
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
               @if ($commentaires->count() > 0)
                 @foreach ($commentaires as $commentaire)
@@ -100,13 +102,7 @@
                     <span class="text-gray-500 font-semibold uppercase flex gap-2">
                       <span>Par : {{ $commentaire->getUser('user_id') }}</span>
                       <span>({{ $commentaire->created_at }})</span>
-                      @if ($commentaire->user_id === auth()->id())
-                        <form action="{{ route('tech-delete-comment', ['id' => $commentaire->id]) }}" method="POST">
-                          @csrf
-                          @method('delete')
-                          <input type="submit" class="underline text-red-500 uppercase cursor-pointer" value="delete">
-                        </form>
-                      @endif
+
 
                     </span>
                     <p class="text-gray-700">{{ $commentaire->commentaire }}</p>
@@ -123,8 +119,19 @@
               </button>
             </td>
           </tr>
-        </table>
+          @endif
 
+        </table>
+        @if($ticket->assigned_to == auth()->id())
+        <div class="flex justify-between mt-2">
+          <a href="{{ route('resolve-agent-ticket',$ticket->id) }}" class="py-2 px-4 bg-green-500 text-white font-medium rounded-md hover:shadow-md">
+            résoudre le ticket
+          </a>
+          <a href="{{ route('escalate-agent-ticket',$ticket->id) }}" class="py-2 px-4 bg-orange-500 text-white font-medium rounded-md hover:shadow-md">
+            Escaller vers N{{ $ticket->support_level+ 1 }}
+          </a>
+        </div>
+        @endif
       </div>
     </div>
   </div>
@@ -133,7 +140,7 @@
     <div class="modal-content relative bg-white shadow-md mx-auto my-20 w-96 p-6 rounded-lg">
       <span class="close text-3xl absolute top-0 right-0 mt-2 mr-4 text-gray-900 cursor-pointer">&times;</span>
       <h2 class="text-xl font-bold mb-4">Créer un nouveau comment</h2>
-      <form id="createCommentForm" action="{{ route('tech-store-comment', ['id' => $ticket->id]) }}" method="POST">
+      <form id="createCommentForm" action="{{ route('agent-store-comment', ['id' => $ticket->id]) }}" method="POST">
         @csrf
         <div class="mb-4">
           <label for="commentaire" class="block mb-2 text-sm font-medium text-gray-900">Nom du comment :</label>

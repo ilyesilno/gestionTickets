@@ -2,18 +2,36 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TechController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Middleware\EmployeMiddleware;
-use App\Http\Middleware\TechnicienMiddleware;
+use App\Http\Middleware\ClientMiddleware;
+use App\Http\Middleware\AgentMiddleware;
 
 Route::middleware('auth')->group(function () {
     //! Admin
     // Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', [AdminController::class, 'dashboard'])->name('admin-dashboard');
+
+         //? sla Management
+         Route::get('/list-slas', [AdminController::class, 'listslas'])->name('list-slas');
+         Route::get('/create-sla', [AdminController::class, 'createsla'])->name('create-sla');
+         Route::post('/store-sla', [AdminController::class, 'storesla'])->name('store-sla');
+         Route::delete('/delete-sla/{id}', [AdminController::class, 'deletesla'])->name('delete-sla');
+                                     
+       //? produits Management
+         Route::get('/list-produits', [AdminController::class, 'listproduits'])->name('list-produits');
+         Route::get('/create-produit', [AdminController::class, 'createproduit'])->name('create-produit');
+         Route::post('/store-produit', [AdminController::class, 'storeproduit'])->name('store-produit');
+         Route::delete('/delete-produit/{id}', [AdminController::class, 'deleteproduit'])->name('delete-produit');
+         
+         //? abonnement Management
+         Route::get('/list-abonnements', [AdminController::class, 'listAbonnements'])->name('list-abonnements');
+         Route::get('/create-abonnement', [AdminController::class, 'createabonnement'])->name('create-abonnement');
+         Route::post('/store-abonnement', [AdminController::class, 'storeabonnement'])->name('store-abonnement');
+         Route::delete('/delete-abonnement/{id}', [AdminController::class, 'deleteabonnement'])->name('delete-abonnement');
 
         //? User Management
         Route::get('/list-users', [AdminController::class, 'listUsers'])->name('list-users');
@@ -60,56 +78,60 @@ Route::middleware('auth')->group(function () {
     });
 
     //! Client
-    Route::middleware(EmployeMiddleware::class)->group(function () {
-        Route::get('/employe-dashboard', [EmployeController::class, 'dashboard'])->name('employe-dashboard');
+    Route::middleware(ClientMiddleware::class)->group(function () {
+        Route::get('/client-dashboard', [ClientController::class, 'dashboard'])->name('client-dashboard');
 
-        Route::post('/employe-markAsRead/{id}', [EmployeController::class, 'markAsRead'])->name('employe-markAsRead');
-        Route::post('/employe-markAllAsRead', [EmployeController::class, 'markAllAsRead'])->name('employe-markAllAsRead');
-        Route::delete('/employe-toutEffacer', [EmployeController::class, 'toutEffacer'])->name('employe-tout-effacer');
+        Route::post('/client-markAsRead/{id}', [ClientController::class, 'markAsRead'])->name('client-markAsRead');
+        Route::post('/client-markAllAsRead', [ClientController::class, 'markAllAsRead'])->name('client-markAllAsRead');
+        Route::delete('/client-toutEffacer', [ClientController::class, 'toutEffacer'])->name('client-tout-effacer');
 
         //? Ticket Management
-        Route::get('/employe/list-tickets', [EmployeController::class, 'listTickets'])->name('employe-list-tickets');
-        Route::get('/employe/list-tickets/search', [EmployeController::class, 'employeSearch'])->name('search-employe-tickets');
-        Route::post('/employe/store-ticket', [EmployeController::class, 'storeTicket'])->name('store-ticket');
-        Route::get('/employe/ticket/{id}', [EmployeController::class, 'afficherTicket'])->name('show-employe-ticket');
-        Route::get('/employe/edit-ticket/{id}', [EmployeController::class, 'editTicket'])->name('edit-employe-ticket');
-        Route::put('/employe/update-ticket/{id}', [EmployeController::class, 'updateTicket'])->name('update-employe-ticket');
-        Route::delete('/employe/delete-ticket/{id}', [EmployeController::class, 'deleteTicket'])->name('delete-employe-ticket');
+        Route::get('/client/list-tickets', [ClientController::class, 'listTickets'])->name('client-list-tickets');
+        Route::get('/client/list-tickets/search', [ClientController::class, 'clientSearch'])->name('search-client-tickets');
+        Route::post('/client/store-ticket', [ClientController::class, 'storeTicket'])->name('store-ticket');
+        Route::get('/client/ticket/{id}', [ClientController::class, 'afficherTicket'])->name('show-client-ticket');
+        Route::get('/client/edit-ticket/{id}', [ClientController::class, 'editTicket'])->name('edit-client-ticket');
+        Route::put('/client/update-ticket/{id}', [ClientController::class, 'updateTicket'])->name('update-client-ticket');
+        Route::delete('/client/delete-ticket/{id}', [ClientController::class, 'deleteTicket'])->name('delete-client-ticket');
 
 
         //? Comment Management
-        Route::post('/employe/store-comment/{id}', [EmployeController::class, 'storeEmployeComment'])->name('employe-store-comment');
-        Route::delete('/employe/delete-comment/{id}', [EmployeController::class, 'deleteEmployeComment'])->name('employe-delete-comment');
+        Route::post('/client/store-comment/{id}', [ClientController::class, 'storeclientComment'])->name('client-store-comment');
+        Route::delete('/client/delete-comment/{id}', [ClientController::class, 'deleteclientComment'])->name('client-delete-comment');
 
         //? Profile Management
-        Route::get('/employe/profile', [EmployeController::class, 'profile'])->name('employe-profile');
-        Route::put('/employe/update-profile', [EmployeController::class, 'updateInfo'])->name('employe-updateInfo');
-        Route::put('/employe/change-password', [EmployeController::class, 'changePassword'])->name('employe-changePassword');
+        Route::get('/client/profile', [ClientController::class, 'profile'])->name('client-profile');
+        Route::put('/client/update-profile', [ClientController::class, 'updateInfo'])->name('client-updateInfo');
+        Route::put('/client/change-password', [ClientController::class, 'changePassword'])->name('client-changePassword');
     });
 
     //! Agent
-    Route::middleware(TechnicienMiddleware::class)->group(function () {
-        Route::get('/tech-dashboard', [TechController::class, 'dashboard'])->name('tech-dashboard');
+    Route::middleware(AgentMiddleware::class)->group(function () {
+        Route::get('/agent-dashboard', [AgentController::class, 'dashboard'])->name('agent-dashboard');
 
-        Route::get('/tech/list-tickets', [TechController::class, 'listTickets'])->name('tech-list-tickets');
-        Route::get('/tech/ticket/{id}', [TechController::class, 'afficherTicket'])->name('show-tech-ticket');
-        Route::get('/tech/edit-ticket/{id}', [TechController::class, 'editTicket'])->name('edit-tech-ticket');
-        Route::put('/tech/update-ticket/{id}', [TechController::class, 'updateTicket'])->name('update-tech-ticket');
-        Route::get('/tech/list-tickets/search', [TechController::class, 'techSearch'])->name('search-tech-tickets');
+        Route::get('/agent/list-tickets', [AgentController::class, 'listTickets'])->name('agent-list-tickets');
+        Route::get('/agent/ticket/{id}', [AgentController::class, 'afficherTicket'])->name('show-agent-ticket');
+        Route::get('/agent/edit-ticket/{id}', [AgentController::class, 'editTicket'])->name('edit-agent-ticket');
+        Route::get('/agent/selfasign-ticket/{id}', [AgentController::class, 'selfassignTicket'])->name('selfasign-agent-ticket');
+        
+        Route::put('/agent/update-ticket/{id}', [AgentController::class, 'updateTicket'])->name('update-agent-ticket');
+        Route::get('/agent/list-tickets/search', [AgentController::class, 'agentSearch'])->name('search-agent-tickets');
 
+        Route::get('/agent/escalate-ticket/{id}', [AgentController::class, 'escalateTicket'])->name('escalate-agent-ticket');
+        Route::get('/agent/resolve-ticket/{id}', [AgentController::class, 'resolveTicket'])->name('resolve-agent-ticket');
 
         //? Comment Management
-        Route::post('/tech/store-comment/{id}', [TechController::class, 'storeTechComment'])->name('tech-store-comment');
-        Route::delete('/tech/delete-comment/{id}', [TechController::class, 'deleteTechComment'])->name('tech-delete-comment');
+        Route::post('/agent/store-comment/{id}', [AgentController::class, 'storeagentComment'])->name('agent-store-comment');
+        Route::delete('/agent/delete-comment/{id}', [AgentController::class, 'deleteagentComment'])->name('agent-delete-comment');
 
         //? Profile Management
-        Route::get('/tech/profile', [TechController::class, 'profile'])->name('tech-profile');
-        Route::put('/tech/update-profile', [TechController::class, 'updateInfo'])->name('tech-updateInfo');
-        Route::put('/tech/change-password', [TechController::class, 'changePassword'])->name('tech-changePassword');
+        Route::get('/agent/profile', [AgentController::class, 'profile'])->name('agent-profile');
+        Route::put('/agent/update-profile', [AgentController::class, 'updateInfo'])->name('agent-updateInfo');
+        Route::put('/agent/change-password', [AgentController::class, 'changePassword'])->name('agent-changePassword');
 
         //? Comment Management
-        Route::post('/tech/store-comment/{id}', [TechController::class, 'storeTechComment'])->name('tech-store-comment');
-        Route::delete('/tech/delete-comment/{id}', [TechController::class, 'deleteTechComment'])->name('tech-delete-comment');
+        Route::post('/agent/store-comment/{id}', [AgentController::class, 'storeagentComment'])->name('agent-store-comment');
+        Route::delete('/agent/delete-comment/{id}', [AgentController::class, 'deleteagentComment'])->name('agent-delete-comment');
 
 
     });

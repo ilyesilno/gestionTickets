@@ -1,4 +1,4 @@
-@extends('layout.employe-layout')
+@extends('layout.client-layout')
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -19,7 +19,7 @@
       <div class="profileInfo w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <h1 class="text-xl font-medium">Informations sur le profil</h1>
         <p class="text-sm">Mettez à jour les informations de profil et l'adresse e-mail de votre compte</p>
-        <form action="{{ route('employe-updateInfo') }}" method="POST">
+        <form action="{{ route('client-updateInfo') }}" method="POST">
           @csrf
           @method('put')
           <div class="mb-3">
@@ -41,7 +41,7 @@
       <div class="updatePassword w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <h1 class="text-xl font-medium ">Modifier le mot de passe</h1>
         <p class="text-sm">Assurez-vous d'utiliser un mot de passe long et aléatoire</p>
-        <form action="{{ route('employe-changePassword') }}" method="POST">
+        <form action="{{ route('client-changePassword') }}" method="POST">
           @csrf
           @method('put')
           <div class="mb-3">

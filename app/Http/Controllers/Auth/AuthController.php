@@ -32,9 +32,9 @@ class AuthController extends Controller
                     case 1:
                         return redirect('/admin-dashboard');
                     case 2:
-                        return redirect('/tech-dashboard');
+                        return redirect('/agent-dashboard');
                     case 3:
-                        return redirect('/employe-dashboard');
+                        return redirect('/client-dashboard');
                     default:
                         break;
                 }
