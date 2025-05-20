@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\abonnement;
 use App\Models\Statut;
 use App\Models\Ticket;
-use App\Models\Priorite;
+use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Commentaire;
 use App\Models\Notification;
+use App\Models\Sla;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,8 +56,12 @@ class ClientController extends Controller
     public function afficherTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
+        $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
+        $abonnement = abonnement::where('produitID',$produit->id)->get()->first();
+        $sla = Sla::where('id',$abonnement->slaID)->get()->first();
+
         $commentaires = Commentaire::where('ticket_id', $id)->get();
-        return view('client.Ticket Management.show-ticket', compact('ticket', 'commentaires'));
+        return view('client.Ticket Management.show-ticket', compact('ticket', 'produit','sla','commentaires'));
     }
     public function editTicket($id)
     {
@@ -75,6 +81,18 @@ class ClientController extends Controller
         $ticket->update($validatedData);
 
         return redirect()->route('client-list-tickets')->with("success", "Le ticket a été modifié avec succès");
+    }
+
+    public function closeTicket($id)
+    {
+        $ticket = Ticket::where('id', $id)->first();
+
+        $ticket->statut = 'ferme';
+
+        $ticket->save();
+        
+
+        return redirect()->route('client-list-tickets')->with("success", "Le ticket a été cloture avec succès");
     }
     public function deleteTicket($id)
     {
@@ -171,7 +189,7 @@ class ClientController extends Controller
         $user = Auth::user();
         $user->nom_complet = $validatedData['nom_complet'];
         $user->email = $validatedData['email'];
-        $user->User::save();
+        $user->save();
         return redirect()->route('client-profile')->with('success', 'Your profile info has been updated');
     }
     public function changePassword(Request $request)

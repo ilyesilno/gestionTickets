@@ -24,6 +24,24 @@
       <div
         class="ticket w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6 h-[90%] overflow-y-scroll">
         <h1 class="text-2xl font-medium mb-5">Ticket</h1>
+        <div class="cards grid grid-cols-2 gap-4">
+        <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
+            <div class="number text-3xl text-light-700 font-extrabold">
+              00  / 0{{$sla->duree_qualification}} mins
+            </div>
+            <div class="text text-lg text-light-900 font-semibold mt-2">
+              Duree ecoule de qualification / SLA
+            </div>
+          </div>
+          <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
+            <div class="number text-3xl text-light-700 font-extrabold">
+              00 : 00 / 0{{$sla->duree_qualification}} hrs
+            </div>
+            <div class="text text-lg text-light-900 font-semibold mt-2">
+              Duree ecoule de traitement / SLA
+            </div>
+          </div>
+        </div>
         <table class="min-w-full divide-y divide-gray-200">
           <tr>
             <th scope="col"
@@ -119,12 +137,13 @@
               @else
                 <p>Pas de commentaire</p>
               @endif
-
+              @if($ticket->statut != 'resolu')
               <button
                 class="py-1 px-2 border border-black rounded-full absolute right-1 top-1 flex justify-center items-center"
                 id="openCreateCommentModalBtn">
                 <i class="fa-solid fa-plus text-sm"></i>
               </button>
+              @endif
             </td>
           </tr>
         </table>

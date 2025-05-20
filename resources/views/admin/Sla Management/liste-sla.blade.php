@@ -3,7 +3,7 @@
   <div class="list-sla">
     <div class="content pt-6 w-[95%] mx-auto my-5 flex flex-col gap-11">
       <div class="lis-users w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
-        <h1 class="text-2xl font-medium ">List abonnements</h1>
+        <h1 class="text-2xl font-medium ">List SLAs</h1>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -17,11 +17,11 @@
             </th>
               <th scope="col"
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                duree qualification
+                duree qualification (en hrs)
               </th>
               <th scope="col"
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                duree resolution
+                duree resolution (en jrs)
               </th>
        
             </tr>

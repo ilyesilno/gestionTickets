@@ -23,19 +23,19 @@
         <form class="space-y-4 md:space-y-6" action="{{ route('store-sla') }}" method="post">
           @csrf
           <div>
-            <label for="nom" class="block mb-2 text-sm font-medium text-gray-900">nom</label>
+            <label for="nom" class="block mb-2 text-sm font-medium text-gray-900">Nom</label>
             <input type="text" name="nom" id="nom"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
               placeholder="example: premium " />
           </div>
           <div>
-            <label for="date_fin" class="block mb-2 text-sm font-medium text-gray-900">duree qualification</label>
+            <label for="date_fin" class="block mb-2 text-sm font-medium text-gray-900">Duree qualification (en hrs)</label>
             <input type="number" name="duree_qualification" id="duree_qualification"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
               placeholder="0" />
           </div>
           <div>
-            <label for="text" class="block mb-2 text-sm font-medium text-gray-900">duree resolution</label>
+            <label for="text" class="block mb-2 text-sm font-medium text-gray-900">Duree resolution (en jrs)</label>
             <input type="number" name="duree_resolution" id="duree_resolution" placeholder="0"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" />
           </div>

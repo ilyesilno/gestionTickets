@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Commentaire;
 use App\Models\Notification;
+use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,9 @@ class AgentController extends Controller
         $agent = Agent::where('user_id',$user->id)->first();
         $ticketsPerSupport =  Ticket::where('support_level',$agent->support_level,)
         ->where('statut','!=','resolu')
+        ->where('statut','!=','ferme')
         ->get();
+
 
         return view('agent.agent-dashboard', compact('tickets','agent','ticketsPerSupport'));
     }
@@ -31,15 +34,18 @@ class AgentController extends Controller
     {
         $user = User::where('id',auth()->id())->first();
         $agent = Agent::where('user_id',$user->id)->first();
-        $tickets = Ticket::where('support_level', $agent->support_level)->paginate(5);
+        $tickets = Ticket::where('support_level', $agent->support_level)
+        ->where('statut','!=','ferme')->where('statut','!=','resolu')->paginate(5);
 
         return view('agent.Ticket Management.list-tickets', compact('tickets', ));
     }
     public function afficherTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
+
         $commentaires = Commentaire::where('ticket_id', $id)->get();
-        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires'));
+        $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
+        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires','produit'));
     }
     public function editTicket($id)
     {
@@ -102,10 +108,10 @@ class AgentController extends Controller
         $notification = new Notification();
         $notification->user_id = auth()->id();
         $notification->ticket_id = $id;
-        $notification->message = 'Votre ticket a été résolu';
+        $notification->message = 'Votre ticket #'.$id.'a été résolu';
         $notification->type = 'ticket_comment';
         $notification->save();
-        return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été modifié avec succès");
+        return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été résolu avec succès");
     }
 
     public function agentSearch(Request $request)

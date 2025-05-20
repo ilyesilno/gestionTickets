@@ -133,6 +133,35 @@
         </div>
         @endif
       </div>
+      <div
+        class="ticket w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6 h-[90%] overflow-y-scroll">
+        <h1 class="text-2xl font-medium mb-5">Produit</h1>
+        <table class="min-w-full divide-y divide-gray-200">
+          <tr>
+            <th scope="col"
+              class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider bg-gray-50">
+              ID
+            </th>
+            <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
+              {{ $produit->id }}
+            </td>
+          </tr>
+          <tr>
+            <th scope="col"
+              class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider bg-gray-50">
+              Nom d'application
+            </th>
+            <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
+              {{ $produit->nom }}
+            </td>
+          </tr>
+          
+          </tr>
+          
+
+        </table>
+
+      </div>
     </div>
   </div>
   {{-- Create Comment --}}

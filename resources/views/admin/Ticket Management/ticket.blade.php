@@ -68,7 +68,7 @@
               Statut
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getStatut('statut_id') }}
+              {{ $ticket->statut }}
             </td>
           </tr>
           <tr>
@@ -77,7 +77,7 @@
               Priorite
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getPriorite('priorite_id') }}
+              {{ $ticket->priorite }}
             </td>
           </tr>
           <tr>
@@ -86,7 +86,7 @@
               Categorie
             </th>
             <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-              {{ $ticket->getCategorie('categorie_id') }}
+              {{ $ticket->categorie }}
             </td>
           </tr>
           <tr>
@@ -128,11 +128,11 @@
                     <span class="text-gray-500 font-semibold uppercase flex gap-2">
                       <span>Par : {{ $commentaire->getUser('user_id') }}</span>
                       <span>({{ $commentaire->created_at }})</span>
-                      <form action="{{ route('delete-comment', ['id'=>$commentaire->id]) }}" method="POST">
+                      {{-- <form action="{{ route('delete-comment', ['id'=>$commentaire->id]) }}" method="POST">
                         @csrf
                         @method('delete')
                         <input type="submit" class="underline text-red-500 uppercase cursor-pointer" value="delete">
-                      </form>
+                      </form> --}}
                     </span>
                     <p class="text-gray-700">{{ $commentaire->commentaire }}</p>
                   </div>
@@ -141,11 +141,11 @@
                 <p>Pas de commentaire</p>
               @endif
 
-              <button
+              {{-- <button
                 class="py-1 px-2 border border-black rounded-full absolute right-1 top-1 flex justify-center items-center"
                 id="openCreateCommentModalBtn">
                 <i class="fa-solid fa-plus text-sm"></i>
-              </button>
+              </button> --}}
             </td>
           </tr>
         </table>

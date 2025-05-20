@@ -80,30 +80,30 @@
         </div>
 
         <div class="cards grid grid-cols-4 gap-4">
-          <div class="card bg-[#4DBD75] p-7 border border-[#389457] rounded-lg">
-            <div class="number text-xl text-white font-medium">
+          <div class="card p-7 rounded-lg border-2 border-blue-400 bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100 shadow-md">
+            <div class="number text-3xl text-blue-700 font-extrabold">
               {{ $tickets->where('statut', 'ouvert')->count() }}
             </div>
-            <div class="text text-xl text-white font-medium">
+            <div class="text text-lg text-blue-900 font-semibold mt-2">
               Tickets ouverts
             </div>
           </div>
 
 
-          {{-- <div class="card bg-[#F86C6B] p-7 border border-[#F6302E] rounded-lg">
-            <div class="number text-xl text-white font-medium">
-              {{ $tickets->where('statut', 'process')->count() }}
+          <div class="card p-7 rounded-lg border-2 border-green-400 bg-gradient-to-br from-green-100 via-green-50 to-green-100 shadow-md">
+            <div class="number text-3xl text-green-700 font-extrabold">
+              {{ $tickets->where('statut', 'en cours')->count() }}
             </div>
-            <div class="text text-xl text-white font-medium">
+            <div class="text text-lg text-green-900 font-semibold mt-2">
               Tickets en traitement
             </div>
-          </div> --}}
+          </div>
 
-          <div class="card bg-[#F8991D] p-7 border border-[#795627] rounded-lg">
-            <div class="number text-xl text-white font-medium">
+          <div class="card p-7 rounded-lg border-2 border-yellow-400 bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 shadow-md">
+            <div class="number text-3xl text-yellow-700 font-extrabold">
               {{ $tickets->where('statut', 'resolu')->count() }}
             </div>
-            <div class="text text-xl text-white font-medium">
+            <div class="text text-lg text-yellow-900 font-semibold mt-2">
               Tickets a ferme
             </div>
           </div>
@@ -113,9 +113,9 @@
       <div class="recent-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
         <h1 class="text-2xl font-medium">Mes tickets</h1>
-        <button id="openCreerTicketModalBtn"
+        {{-- <button id="openCreerTicketModalBtn"
             class="py-2 px-4 bg-sky-500 text-white font-medium rounded-md hover:shadow-md">Ajouter un
-            ticket</button>
+            ticket</button> --}}
         </div>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">

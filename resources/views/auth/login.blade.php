@@ -20,7 +20,8 @@
       
       <!-- Form side -->
       <div class="md:w-1/2 p-8 flex flex-col justify-center">
-        <h2 class="text-3xl font-extrabold text-blue-600 mb-8 tracking-wide">Welcome back</h2>
+
+        <h2 class="text-4xl font-extrabold text-blue-600 mb-8 tracking-wide">Welcome back</h2>
 
         <form action="{{ route('authenticate') }}" method="POST" class="space-y-6">
           @csrf
@@ -53,7 +54,7 @@
       <!-- Image side -->
       <div class="hidden md:block md:w-1/2 relative">
         <div class="absolute inset-0 bg-cover bg-center"
-          style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=800&q=80');">
+          style="background-image: url('public/images/support-featured-1024x1024.jpg');">
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-transparent opacity-60"></div>
       </div>

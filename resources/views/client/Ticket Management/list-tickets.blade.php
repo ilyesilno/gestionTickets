@@ -108,32 +108,29 @@
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
                     class="">
-                    {{ $ticket->support_level }}
+                    {{ $ticket->priorite }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   <span
-                    class="{{ isset($prioriteColor[$ticket->priorite])
-                        ? $prioriteColor[$ticket->priorite][0] .
-                            ' ' .
-                            $prioriteColor[$ticket->priorite][1] .
-                            ' rounded-lg px-2 py-1 font-semibold'
-                        : '' }}">
-                    {{ $ticket->priorite }}
+                    class="">
+                    {{ $ticket->categorie }}
                   </span>
 
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $ticket->categorie }}
+                  N{{ $ticket->support_level }}
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $ticket->getAssignedTo('assigned_to') }}
                 </td>
+                @if($ticket->statut == 'resolu')
                 <td
                   class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
-                  <a href="{{ route('edit-client-ticket', ['id' => $ticket->id]) }}"
-                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Edit</a>
+                  <a href="{{ route('close-client-ticket', ['id' => $ticket->id]) }}"
+                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Ferme ticket</a>
                 </td>
+                @endif
               </tr>
             @endforeach
           </tbody>

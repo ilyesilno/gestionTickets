@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class abonnement extends Model
 {
     use HasFactory;
-    protected $fillable = ['date_debut', 'date_fin', 'status', 'produitID'];
+    protected $fillable = ['date_debut', 'date_fin', 'status', 'produitID','slaID'];
 
 }
 //estststst

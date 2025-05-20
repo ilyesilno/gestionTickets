@@ -1,10 +1,10 @@
 @php
-  $statutColor = [
-      'Créer' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
-      'En Cours' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
-      'Fermé' => ['bg-[#F86C6B]', 'text-[#92231A]'],
-      'Problème' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
-  ];
+$statutColor = [
+    'ouvert' => ['bg-gradient-to-r from-blue-300 to-blue-500', 'text-blue-900'],
+    'en cours' => ['bg-gradient-to-r from-purple-300 to-purple-500', 'text-purple-900'],
+    'resolu' => ['bg-gradient-to-r from-green-300 to-green-500', 'text-green-900'],
+    'ferme' => ['bg-gradient-to-r from-yellow-300 to-yellow-500', 'text-yellow-900'],
+];
 
   $prioriteColor = [
       'Haut' => ['bg-[#F86C6B]', 'text-[#92231A]'],
@@ -28,12 +28,12 @@
             Tableau de bord
           </h1>
         </div>
-        <div class="cards grid grid-cols-3 gap-4">
-          <div class="card bg-[#4DBD75] p-7 border border-[#389457] rounded-lg">
-            <div class="number text-xl text-white font-medium">
+        <div class="cards grid grid-cols-4 gap-8">
+        <div class="card p-3 rounded-lg border-2 border-purple-400 bg-gradient-to-br from-purple-100 via-purple-50 to-purple-100 shadow-md">
+          <div class="number text-3xl text-purple-700 font-extrabold">
               {{ $tickets->count() }}
             </div>
-            <div class="text text-xl text-white font-medium">
+            <div class="text text-lg text-purple-900 font-semibold mt-2">
               Tickets Attribués
             </div>
           </div>
@@ -47,14 +47,15 @@
             </div>
           </div> --}}
 
-          <div class="card bg-[#F8991D] p-7 border border-[#795627] rounded-lg">
-            <div class="number text-xl text-white font-medium">
+          <div class="card p-3 rounded-lg border-2 border-green-400 bg-gradient-to-br from-green-100 via-green-50 to-green-100 shadow-md">
+            <div class="number text-3xl text-green-700 font-extrabold">
               {{ $ticketsPerSupport->count() }}
             </div>
-            <div class="text text-xl text-white font-medium">
+            <div class="text text-lg text-green-900 font-semibold mt-2">
               Tickets de support N{{ $agent->support_level }}
             </div>
           </div>
+        </div>
         </div>
       </div>
       <div class="recent-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">

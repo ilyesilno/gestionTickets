@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/client/store-ticket', [ClientController::class, 'storeTicket'])->name('store-ticket');
         Route::get('/client/ticket/{id}', [ClientController::class, 'afficherTicket'])->name('show-client-ticket');
         Route::get('/client/edit-ticket/{id}', [ClientController::class, 'editTicket'])->name('edit-client-ticket');
+        Route::get('/client/close-ticket/{id}', [ClientController::class, 'closeTicket'])->name('close-client-ticket');
         Route::put('/client/update-ticket/{id}', [ClientController::class, 'updateTicket'])->name('update-client-ticket');
         Route::delete('/client/delete-ticket/{id}', [ClientController::class, 'deleteTicket'])->name('delete-client-ticket');
 

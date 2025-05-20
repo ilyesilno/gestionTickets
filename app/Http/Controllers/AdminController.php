@@ -122,6 +122,7 @@ class AdminController extends Controller
           'date_fin' => 'required|date',
           'status' => 'required|string',
           'produitID' => 'required|integer',
+          'slaID' => 'required|integer'
 
       ]);
 
@@ -130,6 +131,7 @@ class AdminController extends Controller
           'date_fin' => $validatedData['date_fin'],
           'status' => $validatedData['status'],
           'produitID' => $validatedData['produitID'],
+          'slaID' => $validatedData['slaID'],
       ]);
       return back()->with('success', 'Vous avez bien créé un abonnement');
   }
