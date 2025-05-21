@@ -25,6 +25,9 @@ return new class extends Migration
             $table->id();
             $table->string('support_level');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('tickets_resolu');
+            $table->unsignedBigInteger('tickets_escale');
+
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

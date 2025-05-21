@@ -30,7 +30,7 @@
       <div class="list-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
           <h1 class="text-2xl font-medium ">List Tickets</h1>
-          <button id="openCreerTicketModalBtn"
+          <button id="openCreerTicketModalBtn" 
             class="py-2 px-4 bg-black text-white font-medium rounded-md hover:shadow-md">Ajouter un
             ticket</button>
         </div>

@@ -15,7 +15,7 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role_id === 3) {
+        if (auth()->check() && auth()->user()->role_id === 4) {
             return $next($request);
         }
         return response()->json([

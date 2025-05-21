@@ -20,13 +20,15 @@ return new class extends Migration
             $table->string('statut');
             $table->string('categorie');
             $table->unsignedBigInteger('support_level');
+            $table->unsignedBigInteger('duree_qualification')->nullable();
+            $table->unsignedBigInteger('duree_resolution')->nullable();
             $table->unsignedBigInteger('n1_duration')->nullable();
             $table->unsignedBigInteger('n2_duration')->nullable();
             $table->unsignedBigInteger('n3_duration')->nullable();
             $table->unsignedBigInteger('assigned_to')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('assigned_to')->references('id')->on('agents');
-            $table->timestamp('closed_at');
+            $table->timestamp('closed_at')->nullable();
             $table->timestamps();
         });
     }

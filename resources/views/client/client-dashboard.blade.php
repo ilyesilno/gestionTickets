@@ -27,6 +27,7 @@
           <h1 class="text-2xl font-medium ">
             Tableau de bord
           </h1>
+
           <div class="relative">
             <button type="button" id="notifBtn"
               class="w-12 h-12 flex items-center justify-center rounded-full text-white text-sm font-semibold border-none outline-none bg-gray-600 hover:bg-gray-700 active:bg-gray-600"> {{ $notifications->where('markAsread',false)->count() }} &nbsp;
@@ -113,9 +114,9 @@
       <div class="recent-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
         <h1 class="text-2xl font-medium">Mes tickets</h1>
-        {{-- <button id="openCreerTicketModalBtn"
+        <button id="openCreerTicketModalBtn"
             class="py-2 px-4 bg-sky-500 text-white font-medium rounded-md hover:shadow-md">Ajouter un
-            ticket</button> --}}
+            ticket</button>
         </div>
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -211,4 +212,61 @@
       </div>
     </div>
   </div>
+    {{-- Creer Ticket --}}
+    <div id="creerTicketModal" class="modal hidden fixed inset-0 z-50 overflow-hidden bg-gray-500 bg-opacity-50">
+      <div class="modal-content relative bg-white shadow-md mx-auto my-20 w-1/3 p-6 rounded-lg">
+        <span class="close text-3xl absolute top-0 right-0 mt-2 mr-4 text-gray-900 cursor-pointer">&times;</span>
+        <h2 class="text-xl font-bold mb-4">Créer un nouveau ticket</h2>
+        <form id="creerTicketsForm" action="{{ route('store-ticket') }}" method="POST">
+          @csrf
+          <div class="mb-3">
+            <label for="sujet" class="block mb-2 text-sm font-medium text-gray-900">Sujet</label>
+            <input type="text" name="sujet" id="sujet"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5" />
+            @error('sujet')
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="mb-3">
+            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+            <input type="text" name="description" id="description"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 resize-vertical" />
+            @error('description')
+              <span>{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="mb-3">
+            <label for="priorite_id" class="block mb-2 text-sm font-medium text-gray-900">Priorite</label>
+            <select name="priorite"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+              <option disabled selected>Selectionner une priorité</option>
+                <option value="basse">Basse
+                </option>
+                <option value="basse">Moyenne
+                </option>
+                <option value="basse">Haute
+                </option>
+            </select>
+            
+          </div>
+          <div class="mb-3">
+            <label for="categorie_id" class="block mb-2 text-sm font-medium text-gray-900">Categorie</label>
+            <select name="categorie"
+              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+              <option disabled selected>Selectionner une catégorie</option>
+                <option value="bug">
+                  Bug
+                </option>
+                <option value="question">
+                  Question
+                </option>
+            </select>
+          </div>
+          <button type="submit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            Ajouter un Ticket
+          </button>
+        </form>
+      </div>
+    </div>
 @endsection

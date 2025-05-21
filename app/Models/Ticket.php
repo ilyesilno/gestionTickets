@@ -24,6 +24,8 @@ class Ticket extends Model
         'categorie',
         'support_level',
         'assigned_to',
+        'duree_qualification',
+        'duree_resolution',
         'n1_duration',
         'n2_duration',
         'n3_duration',
@@ -33,9 +35,12 @@ class Ticket extends Model
     protected $attributes = [
         'statut' => 'ouvert',
         'support_level' => 1,
-        'n1_support' => 0,
-        'n2_support' => 0,
-        'n3_support' => 0,
+        'qualif_duration' => 0,
+        'traitement_duration' => 0,
+        'n1_duration' => 0,
+        'n2_duration' => 0,
+        'n3_duration' => 0,
+        'closed_at' => null
 
     ];
 
@@ -78,6 +83,12 @@ class Ticket extends Model
         if ($user != null) {
             return $user->nom_complet;
         }
+    }
+
+    public function getAbonnement()
+    {
+        $abonnement = abonnement::find($this->user_id);
+        return $abonnement;
     }
     public function getUserEmail()
     {

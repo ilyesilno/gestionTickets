@@ -17,8 +17,14 @@ class Agent extends Model
     protected $fillable = [
         'user_id',
         'support_level',
+        'tickets_resolu',
+        'tickets_escale'
     ];
 
+    protected $attributes = [
+        'tickets_resolu' => 0,
+        'tickets_escale' => 0
+    ];
   
 
     

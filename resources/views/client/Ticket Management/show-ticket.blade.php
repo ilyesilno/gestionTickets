@@ -27,7 +27,7 @@
         <div class="cards grid grid-cols-2 gap-4">
         <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
             <div class="number text-3xl text-light-700 font-extrabold">
-              00  / 0{{$sla->duree_qualification}} mins
+              {{ $ticket->duree_qualification }} / 0{{$sla->duree_qualification}} mins
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
               Duree ecoule de qualification / SLA
@@ -35,7 +35,7 @@
           </div>
           <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
             <div class="number text-3xl text-light-700 font-extrabold">
-              00 : 00 / 0{{$sla->duree_qualification}} hrs
+              {{ $ticket->duree_resolution }} / 0{{$sla->duree_resolution}} hrs
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
               Duree ecoule de traitement / SLA

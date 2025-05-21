@@ -48,12 +48,13 @@ class CheckSlaTickets extends Command
             // For example, if you add a `last_overdue_notified_at` timestamp to the Ticket model:
             
                // Notify hourly if still overdue
-                    $this->info("Ticket #{$ticket->id} is overdue: {$ticket->title}");
-
-                    $this->sendOverdueNotification($ticket);
+                    $this->info("Ticket #{$ticket->id} is overdue: {$ticket->sujet}");
+                    $ticket->increment('n1_duration',1);
+                    $ticket->update();
+                    // $this->sendNotification($ticket);
 
                     // Update notification timestamp to prevent immediate re-notification
-                    $ticket->update(['last_overdue_notified_at' => now()]);
+                   
                 }
             
         $this->info('Overdue ticket check complete.');
@@ -63,7 +64,7 @@ class CheckSlaTickets extends Command
     }
     protected function sendNotification(Ticket $ticket)
     {
-
+        $this->info('init notifying');
         $responsable = Responsable::where('id',$ticket->respo_id);
         // $recipients = User::whereHas('roles', function ($query) {
         //     $query->where('name', 'support_manager');
