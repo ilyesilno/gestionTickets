@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->string('prix');
             $table->date('date_creation');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();

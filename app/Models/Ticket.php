@@ -24,11 +24,19 @@ class Ticket extends Model
         'categorie',
         'support_level',
         'assigned_to',
+        'n1_duration',
+        'n2_duration',
+        'n3_duration',
+        'closed_at'
     ];
 
     protected $attributes = [
         'statut' => 'ouvert',
-        'support_level' => 1
+        'support_level' => 1,
+        'n1_support' => 0,
+        'n2_support' => 0,
+        'n3_support' => 0,
+
     ];
 
 
