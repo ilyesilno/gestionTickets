@@ -16,7 +16,7 @@ class CheckSlaTickets extends Command
      *
      * @var string
      */
-    protected $signature = 'app:check-sla-tickets';
+    protected $signature = 'tickets:check-sla';
 
     /**
      * The console command description.
