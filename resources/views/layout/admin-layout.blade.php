@@ -90,6 +90,19 @@
             </ul>
           </li>
 
+          <!-- Agents -->
+<li
+class="px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+hover:bg-indigo-100 hover:text-indigo-700
+{{ request()->route()->getName() === 'agents.index' ? 'bg-indigo-200 text-indigo-800' : '' }}">
+<a href="{{ route('agents.index') }}" class="flex items-center gap-3">
+  <i class="fa-solid fa-user-shield fa-lg"></i>
+  <span>Agents</span>
+</a>
+</li>
+
+          
+
           <!-- Abonnement -->
           <li
             class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300

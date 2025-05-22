@@ -15,13 +15,15 @@ Route::middleware('auth')->group(function () {
     // Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', [AdminController::class, 'dashboard'])->name('admin-dashboard');
 
-         //? sla Management
+        //? sla Management
          Route::get('/list-slas', [AdminController::class, 'listslas'])->name('list-slas');
          Route::get('/create-sla', [AdminController::class, 'createsla'])->name('create-sla');
          Route::post('/store-sla', [AdminController::class, 'storesla'])->name('store-sla');
          Route::delete('/delete-sla/{id}', [AdminController::class, 'deletesla'])->name('delete-sla');
-                                     
-       //? produits Management
+        //? agent Management
+        Route::get('/admin/agents/{id}', [AdminController::class, 'suiviAgent'])->name('admin.suivi.agent');
+        
+         //? produits Management
          Route::get('/list-produits', [AdminController::class, 'listproduits'])->name('list-produits');
          Route::get('/create-produit', [AdminController::class, 'createproduit'])->name('create-produit');
          Route::post('/store-produit', [AdminController::class, 'storeproduit'])->name('store-produit');
