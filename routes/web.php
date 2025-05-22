@@ -15,12 +15,19 @@ Route::middleware('auth')->group(function () {
     // Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', [AdminController::class, 'dashboard'])->name('admin-dashboard');
 
+
+                 //? Logo Management
+
+                 Route::get('/admin/settings', [AdminController::class, 'Logo'])->name('admin.settings');
+                 Route::post('/admin/settings/logo', [AdminController::class, 'updateLogo'])->name('admin.settings.updateLogo');
          //? sla Management
          Route::get('/list-slas', [AdminController::class, 'listslas'])->name('list-slas');
          Route::get('/create-sla', [AdminController::class, 'createsla'])->name('create-sla');
          Route::post('/store-sla', [AdminController::class, 'storesla'])->name('store-sla');
          Route::delete('/delete-sla/{id}', [AdminController::class, 'deletesla'])->name('delete-sla');
-                                     
+                        //? agent Management
+
+             Route::get('/admin/suivi-agent', [AdminController::class, 'suiviAgent'])->name('admin.suivi.agent');              
        //? produits Management
          Route::get('/list-produits', [AdminController::class, 'listproduits'])->name('list-produits');
          Route::get('/create-produit', [AdminController::class, 'createproduit'])->name('create-produit');
@@ -95,6 +102,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/client/update-ticket/{id}', [ClientController::class, 'updateTicket'])->name('update-client-ticket');
         Route::delete('/client/delete-ticket/{id}', [ClientController::class, 'deleteTicket'])->name('delete-client-ticket');
 
+Route::get('/get-sla-durations-client/{id}', [ClientController::class, 'getSlaDurations'])->name('get-sla-durations-client');
+
+
+Route::get('/get-sla-durations-agent/{id}', [AgentController::class, 'getSlaDurations'])->name('get-sla-durations-agent');
 
         //? Comment Management
         Route::post('/client/store-comment/{id}', [ClientController::class, 'storeclientComment'])->name('client-store-comment');

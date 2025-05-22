@@ -35,8 +35,8 @@ class Ticket extends Model
     protected $attributes = [
         'statut' => 'ouvert',
         'support_level' => 1,
-        'qualif_duration' => 0,
-        'traitement_duration' => 0,
+        'duree_qualification' => 0,
+        'duree_resolution' => 0,
         'n1_duration' => 0,
         'n2_duration' => 0,
         'n3_duration' => 0,

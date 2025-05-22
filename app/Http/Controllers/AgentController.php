@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agent;
-use App\Models\Statut;
+use App\Models\Sla;
+use App\Models\abonnement;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Commentaire;
@@ -42,10 +43,24 @@ class AgentController extends Controller
     public function afficherTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
+        $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
+        $abonnement = abonnement::where('produitID',$produit->id)->get()->first();
+        $sla = Sla::where('id',$abonnement->slaID)->get()->first();
 
+        
         $commentaires = Commentaire::where('ticket_id', $id)->get();
         $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
-        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires','produit'));
+        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires','produit','sla'));
+    }
+
+    public function getSlaDurations($id){
+        $qualification = Ticket::where('id', $id)->first()->duree_qualification;
+
+        $resolution = Ticket::where('id', $id)->first()->duree_resolution;
+
+        
+        
+        return response()->json(['qualification' => $qualification, 'resolution' => $resolution]);
     }
     public function editTicket($id)
     {
@@ -77,6 +92,10 @@ class AgentController extends Controller
     public function escalateTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
+        $agent = Agent::where('id',auth()->id());
+
+        $agent->increment('tickets_escale',1);
+        $agent->save();
         $level = 1;
         if ($ticket ->support_level == 1){
             $level = 2;
@@ -101,7 +120,10 @@ class AgentController extends Controller
     {
         $ticket = Ticket::where('id', $id)->first();
         
+        $agent = Agent::where('id',auth()->id());
 
+        $agent->increment('tickets_resolu',1);
+        $agent->save();
         $ticket->assigned_to = null;
         $ticket->statut = 'resolu';
         $ticket->save();

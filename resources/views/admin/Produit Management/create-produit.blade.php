@@ -28,17 +28,6 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
               placeholder="gestion de ticket  " />
           </div>
-         
-          <div>
-            <label for="text" class="block mb-2 text-sm font-medium text-gray-900">prix</label>
-            <input type="number" name="prix" id="prix" placeholder="0"
-              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" />
-          </div>
-          <div>
-            <label for="text" class="block mb-2 text-sm font-medium text-gray-900">date creation</label>
-            <input type="date" name="date_creation" id="date_creation" placeholder="active/inactive"
-              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" />
-          </div>
 
           <div>
             <label for="roles" class="block mb-2 text-sm font-medium text-gray-900">client</label>
@@ -46,7 +35,9 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-3">
               <option>Selectionner un client</option>
               @foreach ($users as $user)
-                <option value="{{ $user->id }}">{{ $user->email }}</option>
+                <option value="{{ $user->id }}">
+                  {{ $user->nom_complet }} -
+                  {{ $user->email }} </option>
               @endforeach
             </select>
           </div>

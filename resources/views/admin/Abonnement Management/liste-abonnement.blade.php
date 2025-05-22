@@ -41,7 +41,7 @@
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $abonnement->status}}</td>
                   <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                    {{ $abonnement->produitID}}</td>
+                    {{ $abonnement->getProduit()}}</td>
                 <td class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider flex justify-center">
                   <form action="{{ route('delete-abonnement', ['id' => $abonnement->id]) }}" method="POST">
                     @csrf

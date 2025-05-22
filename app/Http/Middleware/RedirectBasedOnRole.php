@@ -23,8 +23,6 @@ class RedirectBasedOnRole
                 case 2:
                     return redirect('/agent-dashboard');
                 case 3:
-                    return redirect('/responsable-dashboard');
-                case 4:
                     return redirect('/client-dashboard');
                 default:
                     return redirect('/login');

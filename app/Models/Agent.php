@@ -33,7 +33,10 @@ class Agent extends Model
     {
         return $this->hasMany(Ticket::class);
     }
-   
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class);

@@ -28,10 +28,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Role::factory()->create([
-            'nom' => 'responsable'
-        ]);
-
-        Role::factory()->create([
             'nom' => 'client'
         ]);
 
@@ -54,16 +50,10 @@ class DatabaseSeeder extends Seeder
             'nom_complet' => 'client 1',
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password123'),
-            'role_id'=> 4
-        ]);
-
-        User::factory()->create([
-            'nom_complet' => 'responsable client 1',
-            'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make('password123'),
             'role_id'=> 3
         ]);
-        
+
+
 //Users of type agents
         User::factory()->create([
             'nom_complet' => 'agent n1',
@@ -73,7 +63,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Agent::factory()->create([
-            'user_id' => 4,
+            'user_id' => 3,
             'support_level'=> 1
         ]);
 
@@ -85,7 +75,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Agent::factory()->create([
-            'user_id' => 5,
+            'user_id' => 4,
             'support_level'=> 2
         ]);
 
@@ -97,7 +87,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Agent::factory()->create([
-            'user_id' => 6,
+            'user_id' => 5,
             'support_level'=> 3
         ]);
 

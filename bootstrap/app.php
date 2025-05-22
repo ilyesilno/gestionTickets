@@ -17,5 +17,5 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     }) ->withSchedule(function (Schedule $schedule) { // <-- This is the new place!
-        $schedule->command('tickets:check-sla')->everyMinute();
+        $schedule->command('tickets:check-sla')->everyFiveSeconds();
     })->create();

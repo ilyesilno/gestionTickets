@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\TicketAttribuer;
 use App\Models\Role;
+use App\Models\Agent;
+use App\Models\WebsiteSetting;
 use App\Models\User;
 use App\Models\abonnement;
 use App\Models\Ticket;
@@ -25,6 +27,26 @@ class AdminController extends Controller
         $tickets = Ticket::all();
         return view('admin.admin-dashboard', compact('tickets'));
     }
+     //!/* agent Management */
+    
+     public function suiviAgent(Request $request)
+     {
+         $agents = User::where('role_id', 2)->get(); // Tous les utilisateurs avec le rôle "agent"
+         $selectedAgent = null;
+         $agentData = null;
+     
+         if ($request->has('agent_id')) {
+             $selectedAgent = User::find($request->input('agent_id'));
+     
+             if ($selectedAgent) {
+                 $agentData = Agent::where('user_id', $selectedAgent->id)->first();
+             }
+         }
+     
+         return view('admin.Agent Management.suivi-agent', compact('agents', 'selectedAgent', 'agentData'));
+     }
+     
+          
      //!/* sla Management */
 
      public function listslas()
@@ -62,6 +84,30 @@ class AdminController extends Controller
      
          return redirect()->back()->with("warning", "Le sla a été supprimé avec succès");
      }
+
+     public function showLoginForm()
+     {
+         $logoPath = WebsiteSetting::getValue('login_logo') ?? 'default-logo.png'; // fallback si pas de logo
+         return view('auth.login', compact('logoPath'));
+     }
+    public function Logo()
+    {
+        $logoPath = WebsiteSetting::getValue('login_logo');
+        return view('admin.Logo Management.Logo', compact('logoPath'));
+    }
+
+    public function updateLogo(Request $request)
+    {
+        $request->validate([
+            'logo' => 'required|image|max:2048',
+        ]);
+    
+        $path = $request->file('logo')->store('logos', 'public');
+    
+        WebsiteSetting::setValue('login_logo', $path);
+    
+        return back()->with('success', 'Le logo a été mis à jour avec succès !');
+    }
       //!/* produit Management */
 
       public function listProduits()
@@ -80,26 +126,22 @@ class AdminController extends Controller
       {
           $validatedData = $request->validate([
               'nom' => 'required|string',
-              'prix' => 'required|integer|min:8',
-              'date_creation' => 'required|date'
-  
+
           ]); 
           
           Produit::create([
               'nom' => $validatedData['nom'],
-              'prix' => $validatedData['prix'],
-              'date_creation' => $validatedData['date_creation'],
               'user_id' => $request->user_id,
 
           ]);
-          return back()->with('success', 'Vous avez bien créé un compte');
+          return back()->with('success', 'Vous avez bien créé un produit.');
       }
       public function deleteProduit($id)
       { 
           $produit = Produit::findOrFail($id);
           $produit->delete();
       
-          return redirect()->back()->with("warning", "Le compte a été supprimé avec succès");
+          return redirect()->back()->with("warning", "Le produit a été supprimé avec succès");
       }
   //!/* abonnement Management */
 
@@ -120,7 +162,6 @@ class AdminController extends Controller
       $validatedData = $request->validate([
           'date_debut' => 'required|date',
           'date_fin' => 'required|date',
-          'status' => 'required|string',
           'produitID' => 'required|integer',
           'slaID' => 'required|integer'
 
@@ -129,7 +170,6 @@ class AdminController extends Controller
       abonnement::create([
            'date_debut' => $validatedData['date_debut'],
           'date_fin' => $validatedData['date_fin'],
-          'status' => $validatedData['status'],
           'produitID' => $validatedData['produitID'],
           'slaID' => $validatedData['slaID'],
       ]);

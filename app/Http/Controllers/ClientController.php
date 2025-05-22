@@ -63,6 +63,16 @@ class ClientController extends Controller
         $commentaires = Commentaire::where('ticket_id', $id)->get();
         return view('client.Ticket Management.show-ticket', compact('ticket', 'produit','sla','commentaires'));
     }
+
+    public function getSlaDurations($id){
+        $qualification = Ticket::where('id', $id)->first()->duree_qualification;
+
+        $resolution = Ticket::where('id', $id)->first()->duree_resolution;
+
+        
+        
+        return response()->json(['qualification' => $qualification, 'resolution' => $resolution]);
+    }
     public function editTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();

@@ -44,16 +44,30 @@ class CheckSlaTickets extends Command
         $this->warn(count($tickets) . ' overdue tickets found.');
 
         foreach ($tickets as $ticket) {
-            // Important: Add logic here to prevent repeated notifications
-            // For example, if you add a `last_overdue_notified_at` timestamp to the Ticket model:
-            
-               // Notify hourly if still overdue
-                    $this->info("Ticket #{$ticket->id} is overdue: {$ticket->sujet}");
-                    $ticket->increment('n1_duration',1);
-                    $ticket->update();
-                    // $this->sendNotification($ticket);
+           
+            if($ticket->statut == 'ouvert'){
+                $ticket->increment('duree_qualification',1);
+            }
+            if($ticket->statut == 'en cours'){
+                $ticket->increment('duree_resolution',1);
+            }
+            if($ticket->support_level == 1){
+                $ticket->increment('n1_duration',1);
 
-                    // Update notification timestamp to prevent immediate re-notification
+            }
+            if($ticket->support_level == 2){
+                $ticket->increment('n2_duration',1);
+
+            }
+            if($ticket->support_level == 3){
+                $ticket->increment('n3_duration',1);
+
+            }
+
+            $ticket->update();
+
+
+
                    
                 }
             

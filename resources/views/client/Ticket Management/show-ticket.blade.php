@@ -25,17 +25,17 @@
         class="ticket w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6 h-[90%] overflow-y-scroll">
         <h1 class="text-2xl font-medium mb-5">Ticket</h1>
         <div class="cards grid grid-cols-2 gap-4">
-        <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
-            <div class="number text-3xl text-light-700 font-extrabold">
-              {{ $ticket->duree_qualification }} / 0{{$sla->duree_qualification}} mins
+        <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md text-center">
+            <div class="number text-3xl text-light-700 font-extrabold ">
+              <span id="qualificationValue"></span> : {{$sla->duree_qualification}} mins
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
               Duree ecoule de qualification / SLA
             </div>
           </div>
-          <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md">
+          <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-100 via-gray-50 to-white-100 shadow-md text-center">
             <div class="number text-3xl text-light-700 font-extrabold">
-              {{ $ticket->duree_resolution }} / 0{{$sla->duree_resolution}} hrs
+              <span id="resolutionValue"></span> :{{$sla->duree_resolution}} hrs
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
               Duree ecoule de traitement / SLA
@@ -169,3 +169,29 @@
     </div>
   </div>
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateValue() {
+                $.ajax({
+                    url: "{{ route('get-sla-durations-client',$ticket->id ) }}", 
+                    type: "GET",
+                    success: function(data) {
+                      console.log(data)
+                        $('#qualificationValue').text(data.qualification);
+                        $('#resolutionValue').text(data.resolution);
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching value:", error);
+                    }
+                });
+            }
+
+            // Call updateValue initially to display the value
+            updateValue();
+
+            // Calling method every 5sec
+            setInterval(updateValue, 5000);
+        });
+    </script>
