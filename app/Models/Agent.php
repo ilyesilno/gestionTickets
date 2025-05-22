@@ -19,10 +19,11 @@ class Agent extends Model
         'support_level',
     ];
 
-  
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
-
     public function tickets()
     {
         return $this->hasMany(Ticket::class);

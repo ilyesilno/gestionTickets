@@ -108,6 +108,24 @@
               <li><a href="{{ route('create-abonnement') }}" class="block px-6 py-2 hover:bg-gray-100">Créer un abonnement</a></li>
             </ul>
           </li>
+          <!-- Agents -->
+<li
+class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
+hover:bg-orange-100 hover:text-orange-700
+{{ (request()->route()->getName() === 'admin.liste.agents' || request()->route()->getName() === 'admin.suivi.agent') ? 'bg-orange-200 text-orange-800' : '' }}">
+<div id="agentDropdown" tabindex="0" role="button"
+  class="flex items-center gap-3 select-none">
+  <i class="fa-solid fa-user-shield fa-lg"></i>
+  <span>Agents</span>
+  <i id="agentChevronDown"
+    class="fa-solid fa-chevron-down ml-auto transition-transform duration-300 text-gray-400"></i>
+</div>
+<ul id="agentDropdownContent"
+  class="hidden absolute top-full right-0 w-full bg-white text-gray-700 rounded-b-lg shadow-md z-20 border border-t-0 border-gray-200">
+  <li><a href="{{ route('admin.suivi.agent') }}" class="block px-6 py-2 hover:bg-gray-100">Suivi d’un agent</a></li>
+</ul>
+</li>
+
 
           <!-- SLA -->
           <li
@@ -195,13 +213,17 @@ hover:bg-indigo-100 hover:text-indigo-700
       setupDropdown('produitDropdown', 'produitDropdownContent', 'produitChevronDown');
       setupDropdown('abonnementDropdown', 'abonnementDropdownContent', 'abonnementChevronDown');
       setupDropdown('slaDropdown', 'slaDropdownContent', 'slaChevronDown');
+      setupDropdown('agentDropdown', 'agentDropdownContent', 'agentChevronDown'); // 👈 ajout du dropdown Agents
   
-      // Clic ailleurs ferme les dropdowns et remet la flèche dans l'état initial
+      // Fermer tous les dropdowns quand on clique ailleurs
       document.addEventListener('click', function () {
-        document.querySelectorAll('#userManagementDropdownContent, #produitDropdownContent, #abonnementDropdownContent, #slaDropdownContent')
-          .forEach(dropdown => dropdown.classList.add('hidden'));
+        document.querySelectorAll(
+          '#userManagementDropdownContent, #produitDropdownContent, #abonnementDropdownContent, #slaDropdownContent, #agentDropdownContent'
+        ).forEach(dropdown => dropdown.classList.add('hidden'));
+  
         document.querySelectorAll('.fa-chevron-down').forEach(icon => icon.classList.remove('rotate-180'));
       });
     });
   </script>
-   </body> </html> ```
+  
+   </body> </html> 

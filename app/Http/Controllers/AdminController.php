@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\WebsiteSetting;
+use App\Models\Agent;
+
 
 
 class AdminController extends Controller
@@ -28,6 +30,25 @@ class AdminController extends Controller
         $tickets = Ticket::all();
         return view('admin.admin-dashboard', compact('tickets'));
     }
+         //!/* agent Management */
+    
+         public function suiviAgent(Request $request)
+{
+    $agents = User::where('role_id', 2)->get(); // Tous les utilisateurs avec le rôle "agent"
+    $selectedAgent = null;
+    $agentData = null;
+
+    if ($request->has('agent_id')) {
+        $selectedAgent = User::find($request->input('agent_id'));
+
+        if ($selectedAgent) {
+            $agentData = Agent::where('user_id', $selectedAgent->id)->first();
+        }
+    }
+
+    return view('admin.Agent Management.suivi-agent', compact('agents', 'selectedAgent', 'agentData'));
+}
+
      //!/* sla Management */
 
      public function listslas()

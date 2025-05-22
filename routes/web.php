@@ -19,8 +19,10 @@ Route::middleware('auth')->group(function () {
 
              Route::get('/admin/settings', [AdminController::class, 'Logo'])->name('admin.settings');
              Route::post('/admin/settings/logo', [AdminController::class, 'updateLogo'])->name('admin.settings.updateLogo');
-         
-         
+        //? agent Management
+
+             Route::get('/admin/suivi-agent', [AdminController::class, 'suiviAgent'])->name('admin.suivi.agent');
+             
          //? sla Management
          Route::get('/list-slas', [AdminController::class, 'listslas'])->name('list-slas');
          Route::get('/create-sla', [AdminController::class, 'createsla'])->name('create-sla');
