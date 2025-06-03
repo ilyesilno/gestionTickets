@@ -1,4 +1,20 @@
+@php
+  $statutColor = [
+      'Créer' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
+      'En Cours' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
+      'Fermé' => ['bg-[#F86C6B]', 'text-[#92231A]'],
+      'Problème' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
+  ];
+
+  $prioriteColor = [
+      'Haut' => ['bg-[#F86C6B]', 'text-[#92231A]'],
+      'Moyen' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
+      'Faible' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
+  ];
+@endphp
+
 @extends('layout.agent-layout')
+
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -10,16 +26,8 @@
       {{ session('warning') }}
     </div>
   @endif
-  @if ($errors->any())
-    <div id="Alert" class="py-4 px-4 text-lg font-semibold bg-red-600 text-white absolute right-1 top-1 m-2">
-      <ul>
-        @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
-  <div class="ticket">
+
+  <div class="list-tickets">
     <div class="content pt-6 w-[95%] mx-auto my-5 flex flex-col gap-11">
       <div
         class="ticket w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6 h-[90%] overflow-y-scroll">
@@ -234,29 +242,3 @@
     </div>
   </div>
 @endsection
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            function updateValue() {
-                $.ajax({
-                    url: "{{ route('get-sla-durations-agent',$ticket->id ) }}", 
-                    type: "GET",
-                    success: function(data) {
-                      console.log(data)
-                        $('#qualificationValue').text(data.qualification);
-                        $('#resolutionValue').text(data.resolution);
-
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching value:", error);
-                    }
-                });
-            }
-
-            // Call updateValue initially to display the value
-            updateValue();
-
-            // Calling method every 5sec
-            setInterval(updateValue, 5000);
-        });
-    </script>

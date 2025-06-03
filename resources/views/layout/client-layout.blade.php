@@ -14,20 +14,25 @@
     }
 
     /* Custom scrollbar */
+    /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 10px;
     }
 
     ::-webkit-scrollbar-track {
       background-color: #f3f4f6;
+      background-color: #f3f4f6;
     }
 
     ::-webkit-scrollbar-thumb {
       background: #a0aec0;
       border-radius: 10px;
+      background: #a0aec0;
+      border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb:hover {
+      background: #718096;
       background: #718096;
     }
   </style>
@@ -89,23 +94,8 @@
     <main class="w-5/6 h-full overflow-y-auto p-8 bg-white">
       @yield('content')
     </main>
+    </main>
   </div>
-  <script>
-    const notifBtn = document.getElementById('notifBtn')
-    const notifications = document.getElementById('notifications')
-
-    notifBtn.addEventListener('click', function(event) {
-      if (notifications.classList.contains('hidden')) {
-        notifications.classList.remove('hidden');
-        notifications.classList.add('block');
-      } else {
-        notifications.classList.remove('block');
-        notifications.classList.add('hidden');
-      }
-    });
-
-
-  </script>
 </body>
 
 </html>

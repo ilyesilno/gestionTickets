@@ -11,9 +11,10 @@
       'Moyen' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
       'Faible' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
   ];
-
 @endphp
+
 @extends('layout.client-layout')
+
 @section('content')
   @if (session()->has('success'))
     <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-green-600 absolute right-1 top-1 m-2">
@@ -25,15 +26,18 @@
       {{ session('warning') }}
     </div>
   @endif
+
   <div class="list-tickets">
     <div class="content pt-6 w-[95%] mx-auto my-5 flex flex-col gap-11">
       <div class="list-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
-          <h1 class="text-2xl font-medium ">List Tickets</h1>
+          <h1 class="text-2xl font-medium">List Tickets</h1>
           <button id="openCreerTicketModalBtn" 
-            class="py-2 px-4 bg-black text-white font-medium rounded-md hover:shadow-md">Ajouter un
-            ticket</button>
+            class="py-2 px-4 bg-black text-white font-medium rounded-md hover:shadow-md">
+            Ajouter un ticket
+          </button>
         </div>
+
         <div class="header flex items-center justify-end">
           <form action="{{ route('search-client-tickets') }}" method="GET"
             class="flex justify-between items-center p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50">
@@ -44,41 +48,18 @@
               class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">Search</button>
           </form>
         </div>
+
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Sujet
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Description
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Statut
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Priorité
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Catégorie
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Niveau support
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Attribué à
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                Opération
-              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Sujet</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Description</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Statut</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Priorité</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Catégorie</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Niveau support</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Attribué à</th>
+              <th class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">Opération</th>
             </tr>
           </thead>
           <tbody>
@@ -95,28 +76,25 @@
                   </a>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <span
-                    class="{{ isset($statutColor[$ticket->statut])
-                        ? $statutColor[$ticket->statut][0] .
-                            ' ' .
-                            $statutColor[$ticket->statut][1] .
-                            ' rounded-lg px-2 py-1 font-semibold text-nowrap'
-                        : '' }}">
-                    {{ $ticket->statut }}
+                  @php
+                    $statut = strtolower($ticket->statut);
+                    $statutClasses = $statutColor[$statut] ?? [];
+                  @endphp
+                  <span class="{{ implode(' ', $statutClasses) }} rounded-lg px-2 py-1 font-semibold whitespace-nowrap">
+                    {{ ucfirst($ticket->statut) }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <span
-                    class="">
-                    {{ $ticket->priorite }}
+                  @php
+                    $priorite = ucfirst($ticket->priorite);
+                    $prioriteClasses = $prioriteColor[$priorite] ?? [];
+                  @endphp
+                  <span class="{{ implode(' ', $prioriteClasses) }} rounded-lg px-2 py-1 font-semibold whitespace-nowrap">
+                    {{ $priorite }}
                   </span>
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  <span
-                    class="">
-                    {{ $ticket->categorie }}
-                  </span>
-
+                  {{ ucfirst($ticket->categorie) }}
                 </td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   N{{ $ticket->support_level }}
@@ -124,28 +102,29 @@
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $ticket->getAssignedTo('assigned_to') }}
                 </td>
-                @if($ticket->statut == 'resolu')
-                <td
-                  class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
-                  <a href="{{ route('close-client-ticket', ['id' => $ticket->id]) }}"
-                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Ferme ticket</a>
+                <td class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider text-center">
+                  @if (strtolower($ticket->statut) === 'resolved' || strtolower($ticket->statut) === 'resolu')
+                    <a href="{{ route('close-client-ticket', ['id' => $ticket->id]) }}"
+                      class="text-white text-base font-medium bg-[#4DA845] rounded-lg px-3 py-1 inline-block">
+                      Fermer ticket
+                    </a>
+                  @endif
                 </td>
-                @endif
               </tr>
             @endforeach
           </tbody>
         </table>
-        <div>
+        <div class="mt-4">
           {{ $tickets->links() }}
         </div>
       </div>
     </div>
   </div>
 
-  {{-- Creer Ticket --}}
+  {{-- Créer Ticket Modal --}}
   <div id="creerTicketModal" class="modal hidden fixed inset-0 z-50 overflow-hidden bg-gray-500 bg-opacity-50">
     <div class="modal-content relative bg-white shadow-md mx-auto my-20 w-1/3 p-6 rounded-lg">
-      <span class="close text-3xl absolute top-0 right-0 mt-2 mr-4 text-gray-900 cursor-pointer">&times;</span>
+      <button class="close absolute top-2 right-4 text-3xl font-bold text-gray-900 cursor-pointer">&times;</button>
       <h2 class="text-xl font-bold mb-4">Créer un nouveau ticket</h2>
       <form id="creerTicketsForm" action="{{ route('store-ticket') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -217,4 +196,20 @@
     </form>
     </div>
   </div>
+
+  {{-- Script pour ouvrir/fermer le modal --}}
+  <script>
+    document.getElementById('openCreerTicketModalBtn').addEventListener('click', function () {
+      document.getElementById('creerTicketModal').classList.remove('hidden');
+    });
+    document.querySelector('#creerTicketModal .close').addEventListener('click', function () {
+      document.getElementById('creerTicketModal').classList.add('hidden');
+    });
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('creerTicketModal');
+      if (event.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
+  </script>
 @endsection

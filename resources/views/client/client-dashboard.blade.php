@@ -13,11 +13,13 @@
   ];
 
 @endphp
+
 @extends('layout.client-layout')
+
 @section('content')
-  @if (session()->has('warning'))
-    <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-red-600 absolute right-1 top-1 m-2">
-      {{ session('warning') }}
+@if (session()->has('warning'))
+    <div id="Alert" class="py-4 px-4 text-lg font-semibold text-white bg-red-600 fixed top-4 right-4 rounded shadow-lg z-50">
+        {{ session('warning') }}
     </div>
   @endif
   <div class="mx-auto px-6 py-8">
