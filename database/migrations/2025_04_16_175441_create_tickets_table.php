@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('sujet');
             $table->text('description');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('abonnement_id');
+
+            
             $table->string('priorite');
             $table->string('statut');
             $table->string('categorie');
@@ -27,6 +30,8 @@ return new class extends Migration
             $table->unsignedBigInteger('n3_duration')->nullable();
             $table->unsignedBigInteger('assigned_to')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('abonnement_id')->references('id')->on('abonnements');
+
             $table->foreign('assigned_to')->references('id')->on('agents');
             $table->timestamp('closed_at')->nullable();
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,8 @@ class AuthController extends Controller
 {
     public function loginForm()
     {
-        return view('auth.login');
+        $logoPath = WebsiteSetting::getValue('login_logo') ?? '';
+        return view('auth.login',compact('logoPath'));
     }
 
     public function login(Request $request)

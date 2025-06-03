@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\Produit;
 use App\Models\Categorie;
 use App\Models\Commentaire;
+use App\Models\Historique;
 use App\Models\Notification;
 use App\Models\Sla;
 use Illuminate\Http\Request;
@@ -16,67 +17,95 @@ use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
 {
+    public function createHistorique($ticketId, $action)
+    {
+        Historique::create([
+            'ticket_id' => $ticketId,
+            'action' => $action
+        ]);
+    }
+
     public function dashboard()
     {
+        $userId = auth()->id();
         $tickets = Ticket::where('user_id', auth()->id())->get();
+        $abonnements = abonnement::where('status', 'active')
+            ->whereHas('produit', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->get();
+
+
+
+        $produits = Produit::where('user_id', auth()->id());
         $lastTickets = Ticket::where('user_id', auth()->id())
             ->orderBy('updated_at', 'desc')->get();
         $notifications = Notification::whereHas('ticket', function ($query) use ($tickets) {
             $query->whereIn('id', $tickets->pluck('id'));
         })->orderBy('created_at', 'DESC')->get();
-        return view('client.client-dashboard', compact('tickets', 'lastTickets', 'notifications'));
+        return view('client.client-dashboard', compact('tickets', 'lastTickets', 'notifications', 'produits', 'abonnements'));
     }
     public function listTickets()
     {
         $tickets = Ticket::where('user_id', auth()->id())->paginate(5);
- 
-        return view('client.Ticket Management.list-tickets', compact('tickets', ));
+
+        return view('client.Ticket Management.list-tickets', compact('tickets',));
     }
     public function storeTicket(Request $request)
     {
 
 
         $validatedData = $request->validate([
+            'abonnement_id' => 'required',
             'sujet' => 'required|string',
             'description' => 'required|string',
             'priorite' => 'required|string',
             'categorie' => 'required|string',
         ]);
 
-        
-        Ticket::create([
+
+        $ticket = Ticket::create([
+            'abonnement_id' => $validatedData["abonnement_id"],
             'sujet' => $validatedData["sujet"],
             'description' => $validatedData["description"],
             'user_id' => auth()->id(),
             'priorite' => $validatedData["priorite"],
             'categorie' => $validatedData["categorie"],
         ]);
+
+        $action = 'Creation de ticket #' . $ticket->id;
+
+        $this->createHistorique($ticket->id, $action);
+
+
+
         return redirect()->route('client-list-tickets')->with("success", "Le ticket a été ajouté avec succès");
     }
     public function afficherTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
-        $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
-        $abonnement = abonnement::where('produitID',$produit->id)->get()->first();
-        $sla = Sla::where('id',$abonnement->slaID)->get()->first();
+        $produit = Produit::where('user_id', $ticket->user_id)->get()->first();
+        $abonnement = abonnement::where('produitID', $produit->id)->get()->first();
+        $sla = Sla::where('id', $abonnement->slaID)->get()->first();
 
         $commentaires = Commentaire::where('ticket_id', $id)->get();
-        return view('client.Ticket Management.show-ticket', compact('ticket', 'produit','sla','commentaires'));
+        return view('client.Ticket Management.show-ticket', compact('ticket', 'produit', 'sla', 'commentaires'));
     }
 
-    public function getSlaDurations($id){
+    public function getSlaDurations($id)
+    {
         $qualification = Ticket::where('id', $id)->first()->duree_qualification;
 
         $resolution = Ticket::where('id', $id)->first()->duree_resolution;
 
-        
-        
+
+
         return response()->json(['qualification' => $qualification, 'resolution' => $resolution]);
     }
     public function editTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
-        return view('client.Ticket Management.edit-ticket', compact('ticket', ));
+        return view('client.Ticket Management.edit-ticket', compact('ticket',));
     }
     public function updateTicket(Request $request, $id)
     {
@@ -85,7 +114,7 @@ class ClientController extends Controller
         $validatedData = $request->validate([
             'sujet' => 'required|string',
             'description' => 'required|string',
-           
+
         ]);
 
         $ticket->update($validatedData);
@@ -100,7 +129,7 @@ class ClientController extends Controller
         $ticket->statut = 'ferme';
 
         $ticket->save();
-        
+
 
         return redirect()->route('client-list-tickets')->with("success", "Le ticket a été cloture avec succès");
     }
@@ -119,7 +148,7 @@ class ClientController extends Controller
             ->where('sujet', 'like', '%' . $search . '%')
             ->paginate(5);
 
-        return view('client.Ticket Management.list-tickets', compact('tickets', ));
+        return view('client.Ticket Management.list-tickets', compact('tickets',));
     }
 
     //! Comment Management

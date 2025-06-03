@@ -15,17 +15,10 @@
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
                 nom
             </th>
+              
               <th scope="col"
                 class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                prix
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                date creation
-              </th>
-              <th scope="col"
-                class="px-6 py-3 text-left text-xs font-medium border border-gray-400 uppercase tracking-wider">
-                user
+                Client
               </th>
             </tr>
           </thead>
@@ -36,12 +29,8 @@
                   {{ $produit->id }}</td>
                 <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
                   {{ $produit->nom }}</td>
-                <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $produit->prix }}</td>
-                <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                  {{ $produit->date_creation}}</td>
                   <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
-                    {{ $produit->user_id}}</td>
+                    {{ $produit->getClient()}}</td>
                 <td class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider flex justify-center">
                   <form action="{{ route('delete-produit', ['id' => $produit->id]) }}" method="POST">
                     @csrf

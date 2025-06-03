@@ -79,12 +79,13 @@ class CheckSlaTickets extends Command
     protected function sendNotification(Ticket $ticket)
     {
         $this->info('init notifying');
-        $responsable = Responsable::where('id',$ticket->respo_id);
+        
+        // $responsable = Responsable::where('id',$ticket->respo_id);
         // $recipients = User::whereHas('roles', function ($query) {
         //     $query->where('name', 'support_manager');
         // })->get();
 
-        $recipients =  [$responsable];
+        // $recipients =  [$responsable];
 
         foreach ($recipients as $recipient) {
             $recipient->notify(new TicketOverdueNotification($ticket));

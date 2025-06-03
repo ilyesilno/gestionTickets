@@ -20,13 +20,13 @@
 
       <!-- Logo -->
       <div class="mb-6">
-        {{-- <img src="{{ $logoPath ? asset('storage/' . $logoPath) : asset('images/default-logo.png') }}" alt="Logo" class="h-16 mx-auto"> --}}
+        <img src="{{ $logoPath ? asset('storage/' . $logoPath) : asset('storage/logos/logo-placeholder.jpg') }}" alt="Logo" class="h-40 mx-auto">
 
    
       </div>
 
       <!-- Title -->
-      <h2 class="text-4xl font-extrabold text-blue-600 mb-8 tracking-wide">Welcome back</h2>
+      <h2 class="text-4xl font-extrabold text-blue-600 mb-8 tracking-wide">Bienvenue</h2>
 
       <!-- Login Form -->
       <form action="{{ route('authenticate') }}" method="POST" class="space-y-6 w-full">
@@ -42,8 +42,8 @@
         </div>
 
         <div>
-          <label for="password" class="block mb-2 text-sm font-semibold text-gray-700">Password</label>
-          <input type="password" id="password" name="password" placeholder="Password"
+          <label for="password" class="block mb-2 text-sm font-semibold text-gray-700">Mot de passe</label>
+          <input type="password" id="password" name="password" placeholder="Mot de passe"
                  class="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-400 focus:outline-none" />
           @error('password')
             <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
@@ -52,7 +52,7 @@
 
         <button type="submit"
                 class="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg py-2 hover:from-blue-600 hover:to-blue-800 transition">
-          Sign in
+          Se connecter
         </button>
       </form>
     </div>

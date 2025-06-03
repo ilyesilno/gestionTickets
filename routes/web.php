@@ -92,6 +92,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/client-markAllAsRead', [ClientController::class, 'markAllAsRead'])->name('client-markAllAsRead');
         Route::delete('/client-toutEffacer', [ClientController::class, 'toutEffacer'])->name('client-tout-effacer');
 
+        Route::post('/tickets', [ClientController::class, 'store'])->name('tickets.store');
+
+// Route for adding documents to an existing ticket
+Route::post('/tickets/{ticket}/add-document', [ClientController::class, 'addDocument'])->name('tickets.add-document');
+
+
+// Route for deleting a document (optional)
+Route::delete('/ticket-documents/{document}', [ClientController::class, 'removeDocument'])->name('tickets.remove-document');
+
         //? Ticket Management
         Route::get('/client/list-tickets', [ClientController::class, 'listTickets'])->name('client-list-tickets');
         Route::get('/client/list-tickets/search', [ClientController::class, 'clientSearch'])->name('search-client-tickets');
@@ -101,6 +110,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/client/close-ticket/{id}', [ClientController::class, 'closeTicket'])->name('close-client-ticket');
         Route::put('/client/update-ticket/{id}', [ClientController::class, 'updateTicket'])->name('update-client-ticket');
         Route::delete('/client/delete-ticket/{id}', [ClientController::class, 'deleteTicket'])->name('delete-client-ticket');
+        
 
 Route::get('/get-sla-durations-client/{id}', [ClientController::class, 'getSlaDurations'])->name('get-sla-durations-client');
 

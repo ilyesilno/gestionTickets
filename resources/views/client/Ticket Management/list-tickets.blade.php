@@ -147,56 +147,74 @@
     <div class="modal-content relative bg-white shadow-md mx-auto my-20 w-1/3 p-6 rounded-lg">
       <span class="close text-3xl absolute top-0 right-0 mt-2 mr-4 text-gray-900 cursor-pointer">&times;</span>
       <h2 class="text-xl font-bold mb-4">Créer un nouveau ticket</h2>
-      <form id="creerTicketsForm" action="{{ route('store-ticket') }}" method="POST">
+      <form id="creerTicketsForm" action="{{ route('store-ticket') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-          <label for="sujet" class="block mb-2 text-sm font-medium text-gray-900">Sujet</label>
-          <input type="text" name="sujet" id="sujet"
-            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5" />
-          @error('sujet')
-            <span>{{ $message }}</span>
-          @enderror
+            <label for="sujet" class="block mb-2 text-sm font-medium text-gray-900">Sujet</label>
+            <input type="text" name="sujet" id="sujet"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5" />
+            @error('sujet')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-3">
-          <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
-          <input type="text" name="description" id="description"
-            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 resize-vertical" />
-          @error('description')
-            <span>{{ $message }}</span>
-          @enderror
+            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+            <textarea name="description" id="description" rows="5"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 resize-vertical"></textarea>
+            @error('description')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-3">
-          <label for="priorite_id" class="block mb-2 text-sm font-medium text-gray-900">Priorite</label>
-          <select name="priorite"
-            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
-            <option disabled selected>Selectionner une priorité</option>
-              <option value="basse">Basse
-              </option>
-              <option value="basse">Moyenne
-              </option>
-              <option value="basse">Haute
-              </option>
-          </select>
-          
+            <label for="priorite" class="block mb-2 text-sm font-medium text-gray-900">Priorité</label>
+            <select name="priorite" id="priorite"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+                <option disabled selected>Sélectionner une priorité</option>
+                <option value="basse">Basse</option>
+                <option value="moyenne">Moyenne</option>
+                <option value="haute">Haute</option>
+            </select>
+            @error('priorite')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-3">
-          <label for="categorie_id" class="block mb-2 text-sm font-medium text-gray-900">Categorie</label>
-          <select name="categorie"
-            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
-            <option disabled selected>Selectionner une catégorie</option>
-              <option value="bug">
-                Bug
-              </option>
-              <option value="question">
-                Question
-              </option>
-          </select>
+            <label for="categorie" class="block mb-2 text-sm font-medium text-gray-900">Catégorie</label>
+            <select name="categorie" id="categorie"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+                <option disabled selected>Sélectionner une catégorie</option>
+                <option value="bug">Bug</option>
+                <option value="question">Question</option>
+                <option value="autre">Autre</option>
+            </select>
+            @error('categorie')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
         </div>
+    
+        {{-- New: Document Upload Field --}}
+        <div class="mb-3">
+            <label for="documents" class="block mb-2 text-sm font-medium text-gray-900">
+                Joindre des documents (Max 3 fichiers, 5MB chacun)
+            </label>
+            <input type="file" name="documents[]" id="documents" multiple
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
+            <p class="mt-1 text-sm text-gray-500" id="file_input_help">
+                Types autorisés : PDF, JPG, PNG, JPEG, DOC, DOCX, XLS, XLSX.
+            </p>
+            @error('documents.*') {{-- Wildcard for individual file errors --}}
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+            @error('documents') {{-- Error for total file count --}}
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+        </div>
+    
         <button type="submit"
-          class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-          Ajouter un Ticket
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            Ajouter un Ticket
         </button>
-      </form>
+    </form>
     </div>
   </div>
 @endsection

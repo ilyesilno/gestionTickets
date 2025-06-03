@@ -14,9 +14,19 @@ class abonnement extends Model
         'status' => 'active',
     ];
 
+    public function produit()
+{
+    return $this->belongsTo(Produit::class, 'produitID'); 
+}
     public function getProduit()
     {
         return Produit::find($this->produitID)->nom;
+    }
+
+    public function getSla(){
+        return Sla::find(
+         $this->slaID)->first();
+        
     }
   
 }

@@ -24,21 +24,29 @@
       <div
         class="ticket w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6 h-[90%] overflow-y-scroll">
         <h1 class="text-2xl font-medium mb-5">Ticket</h1>
+        @if(!isset($ticket->assigned_to) && $ticket->statut != 'resolu' && $ticket->statut != 'ferme' )
+        <div class="flex justify-end mt-3">
+          <a href="{{ route('selfasign-agent-ticket',['id' => $ticket->id]) }}"
+            class="inline-block bg-gradient-to-br from-green-400 via-green-500 to-green-100 text-black px-5 py-2 rounded-md font-semibold hover:shadow-lg transition-shadow">
+            Prendre ticket
+          </a>
+        </div>
+                @endif
         <div class="cards grid grid-cols-2 gap-4">
           <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md text-center">
               <div class="number text-3xl text-light-700 font-extrabold ">
-                <span id="qualificationValue"></span> : {{$sla->duree_qualification}} mins
+                <span id="qualificationValue"></span> {{$sla->duree_qualification * 60 }} mins
               </div>
               <div class="text text-lg text-light-900 font-semibold mt-2">
-                Duree ecoule de qualification / SLA
+                Duree de qualification 
               </div>
             </div>
             <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-100 via-gray-50 to-white-100 shadow-md text-center">
               <div class="number text-3xl text-light-700 font-extrabold">
-                <span id="resolutionValue"></span> :{{$sla->duree_resolution}} hrs
+                <span id="resolutionValue"></span> {{$sla->duree_resolution * 24}} hrs
               </div>
               <div class="text text-lg text-light-900 font-semibold mt-2">
-                Duree ecoule de traitement / SLA
+                Duree  de traitement 
               </div>
             </div>
           </div>
@@ -180,6 +188,32 @@
         </table>
 
       </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+            <h4>Attached Documents</h4>
+        </div>
+        <div class="card-body">
+            @if($ticket->documents->isNotEmpty())
+                <ul class="list-group">
+                    @foreach($ticket->documents as $document)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ Storage::disk('public')->url($document->chemin) }}" target="_blank">
+                                <i class="fas fa-file-alt me-2"></i> {{ $document->nom_fichier }}
+                            </a>
+                            <form action="{{ route('tickets.remove-document', $document->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Aucun document n'est attaché à ce ticket.</p>
+            @endif
+        </div>
+    </div>
     </div>
   </div>
   {{-- Create Comment --}}

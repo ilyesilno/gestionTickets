@@ -19,6 +19,7 @@ class Ticket extends Model
         'sujet',
         'description',
         'user_id',
+        'abonnement_id',
         'priorite',
         'statut',
         'categorie',
@@ -49,6 +50,10 @@ class Ticket extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function abonnement(){
+        return $this->belongsTo(abonnement::class);
     }
 
     public function commentaires()
@@ -87,7 +92,7 @@ class Ticket extends Model
 
     public function getAbonnement()
     {
-        $abonnement = abonnement::find($this->user_id);
+        $abonnement = abonnement::find($this->abonnement_id);
         return $abonnement;
     }
     public function getUserEmail()
@@ -109,5 +114,18 @@ class Ticket extends Model
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function documents()
+    {
+        // A Ticket can have many PieceJointes (attachments)
+        // 'PieceJointe::class' refers to the related model
+        // 'ticket_id' is the foreign key on the 'piece_jointes' table
+        return $this->hasMany(PieceJointe::class, 'ticket_id', 'id');
+        // 'ticket_id' is the foreign key on the 'piece_jointes' table that refers to the 'id' of the 'tickets' table.
+        // If your foreign key name on 'piece_jointes' is just 'ticket_id' and the primary key on 'tickets' is 'id',
+        // you can often simply use:
+        // return $this->hasMany(PieceJointe::class);
+        // Laravel will assume the foreign key is 'ticket_id' based on the 'Ticket' model name.
     }
 }

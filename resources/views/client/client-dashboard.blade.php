@@ -1,9 +1,9 @@
 @php
-    $statutColor = [
-      'open' => ['bg-[#4DBD75]', 'text-[#256B3D]'],
-      'process' => ['bg-[#20A8D8]', 'text-[#0F4C75]'],
-      'resolved' => ['bg-[#F86C6B]', 'text-[#92231A]'],
-      'closed' => ['bg-[#F8991D]', 'text-[#5E4B15]'],
+      $statutColor = [
+      'ouvert' => ['bg-gradient-to-r from-blue-300 to-blue-500', 'text-blue-900'],
+      'en cours' => ['bg-gradient-to-r from-purple-300 to-purple-500', 'text-purple-900'],
+      'resolu' => ['bg-gradient-to-r from-green-300 to-green-500', 'text-green-900'],
+      'ferme' => ['bg-gradient-to-r from-yellow-300 to-yellow-500', 'text-yellow-900'],
   ];
 
   $prioriteColor = [
@@ -20,13 +20,13 @@
       {{ session('warning') }}
     </div>
   @endif
-  <div class="main">
-    <div class="content pt-6 w-[95%] mx-auto my-5 flex flex-col gap-11">
-      <div class="dashboard w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
+  <div class="mx-auto px-6 py-8">
+      <div class="">
         <div class="dashHeader flex justify-between">
-          <h1 class="text-2xl font-medium ">
-            Tableau de bord
-          </h1>
+          <div class="mb-10">
+            <h1 class="text-3xl font-bold text-gray-800">Tableau de bord</h1>
+            
+          </div>
 
           <div class="relative">
             <button type="button" id="notifBtn"
@@ -80,7 +80,7 @@
 
         </div>
 
-        <div class="cards grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           <div class="card p-7 rounded-lg border-2 border-blue-400 bg-gradient-to-br from-blue-100 via-blue-50 to-blue-100 shadow-md">
             <div class="number text-3xl text-blue-700 font-extrabold">
               {{ $tickets->where('statut', 'ouvert')->count() }}
@@ -111,13 +111,15 @@
         </div>
 
       </div>
-      <div class="recent-tickets w-full bg-gray-100 rounded-lg border border-gray-200 p-5 flex flex-col gap-6">
+      <div class=" w-full  rounded-lg border border-neutral-50 bg-neutral-50 p-5 flex flex-col gap-6">
         <div class="header flex items-center justify-between">
-        <h1 class="text-2xl font-medium">Mes tickets</h1>
-        <button id="openCreerTicketModalBtn"
-            class="py-2 px-4 bg-sky-500 text-white font-medium rounded-md hover:shadow-md">Ajouter un
-            ticket</button>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6">Mes tickets</h2>
+        <button id="openModalBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+          Créer un ticket
+        </button>
         </div>
+      <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -151,10 +153,10 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white divide-y divide-gray-200">
             @foreach ($lastTickets->take(5) as $lastTicket)
               <tr>
-                <td class="px-6 py-3 text-left text-xs font-medium border border-gray-400 tracking-wider">
+                <td class="px-6 py-3 border border-gray-300 text-sm font-medium text-gray-700">
                   <a href="{{ route('show-client-ticket', ['id' => $lastTicket->id]) }}" class="hover:underline">
                     {{ Str::limit($lastTicket->sujet, 15) }}
                   </a>
@@ -203,6 +205,7 @@
             @endforeach
           </tbody>
         </table>
+      </div>
         <div class="flex justify-end mt-2">
           <a href="{{ route('client-list-tickets') }}"
             class="py-2 px-4 bg-black text-white font-medium rounded-md hover:shadow-md">
@@ -210,7 +213,6 @@
           </a>
         </div>
       </div>
-    </div>
   </div>
     {{-- Creer Ticket --}}
     <div id="creerTicketModal" class="modal hidden fixed inset-0 z-50 overflow-hidden bg-gray-500 bg-opacity-50">
@@ -219,6 +221,16 @@
         <h2 class="text-xl font-bold mb-4">Créer un nouveau ticket</h2>
         <form id="creerTicketsForm" action="{{ route('store-ticket') }}" method="POST">
           @csrf
+          <div class="mb-3">
+            <label for="sujet" class="block mb-2 text-sm font-medium text-gray-900">Produit</label>
+            <select name="abonnement_id"
+            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+            @foreach ($abonnements as $abonnement )
+            <option value="{{ $abonnement->id }}">{{ $abonnement->getProduit() }}
+            </option>
+            @endforeach
+            </select>
+          </div>
           <div class="mb-3">
             <label for="sujet" class="block mb-2 text-sm font-medium text-gray-900">Sujet</label>
             <input type="text" name="sujet" id="sujet"
@@ -269,4 +281,28 @@
         </form>
       </div>
     </div>
+    <script>
+      // Get the modal and the button that opens it
+      const creerTicketModal = document.getElementById('creerTicketModal');
+      const openModalBtn = document.getElementById('openModalBtn');
+      const closeModalSpan = document.querySelector('#creerTicketModal .close');
+    
+    
+      // When the user clicks the button, open the modal
+      openModalBtn.onclick = function() {
+        creerTicketModal.classList.remove('hidden');
+      }
+    
+      // When the user clicks on <span> (x), close the modal
+      closeModalSpan.onclick = function() {
+        creerTicketModal.classList.add('hidden');
+      }
+    
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == creerTicketModal) {
+          creerTicketModal.classList.add('hidden');
+        }
+      }
+    </script>
 @endsection

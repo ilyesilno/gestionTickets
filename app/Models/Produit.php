@@ -10,4 +10,10 @@ class Produit extends Model
     use HasFactory;
     protected $fillable = ['nom', 'user_id'];
 
+    public function getClient(){
+        return User::find($this->user_id)->nom_complet;
+    }
+
+   
+
 }

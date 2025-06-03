@@ -128,7 +128,7 @@
                 <td
                   class="px-6 py-3 text-base font-medium border border-gray-400 tracking-wider grid grid-cols-1 gap-2 text-center">
                   <a href="{{ route('selfasign-agent-ticket', ['id' => $ticket->id]) }}"
-                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">prendre ticket</a>
+                    class="text-white text-base font-medium bg-[#4DA845] rounded-lg">Prendre ticket</a>
                   </form>
                 </td>
                 @endif

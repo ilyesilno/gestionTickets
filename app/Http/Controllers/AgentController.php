@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Commentaire;
 use App\Models\Notification;
+use App\Models\Historique;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AgentController extends Controller
 {
+    public function createHistorique($ticketId,$action){
+        Historique::create([
+            'ticket_id' => $ticketId,
+            'action' => $action
+        ]);
+    }
     public function dashboard()
     {
         $tickets = Ticket::where('assigned_to', auth()->id())->get();
@@ -83,20 +90,28 @@ class AgentController extends Controller
     public function selfassignTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
+        $user = User::where('id',auth()->id())->first();
+        $agent = Agent::where('user_id',auth()->id())->first();
+        
         $ticket->assigned_to = auth()->id();
         $ticket->statut = 'en cours';
         $ticket->save();
-        return view('agent.Ticket Management.edit-ticket', compact('ticket'));
+        $action = 'Affectation de ticket #'.$ticket->id.' a agent'.$user->nom_complet.' de support N'.$agent->support_level;
+
+        $this->createHistorique($ticket->id,$action);
+
+        return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été affécté avec succès");
     }
 
     public function escalateTicket($id)
     {
         $ticket = Ticket::where('id', $id)->first();
-        $agent = Agent::where('id',auth()->id());
+        $agent = Agent::where('user_id',auth()->id())->first();
 
         $agent->increment('tickets_escale',1);
         $agent->save();
         $level = 1;
+        $oldLevel = $ticket ->support_level;
         if ($ticket ->support_level == 1){
             $level = 2;
         }elseif($ticket ->support_level == 2){
@@ -113,27 +128,53 @@ class AgentController extends Controller
         $notification->message = 'Votre ticket a été éscalé';
         $notification->type = 'ticket_comment';
         $notification->save();
+
+        $action = 'Escallation de ticket #'.$ticket->id.' de Niveau de support N'.$ticket ->support_level.' to N'.$level;
+
+        $this->createHistorique($ticket->id,$action);
+
         return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été modifié avec succès");
     }
 
     public function resolveTicket($id)
     {
-        $ticket = Ticket::where('id', $id)->first();
-        
-        $agent = Agent::where('id',auth()->id());
+        // Find the ticket, or throw a 404 if not found
+        $ticket = Ticket::find($id);
+        $user = User::where('id',auth()->id())->first();
 
-        $agent->increment('tickets_resolu',1);
-        $agent->save();
+        if (!$ticket) {
+            return redirect()->route('agent-list-tickets')->with("error", "Le ticket n'a pas été trouvé.");
+        }
+
+        // Ensure the current user is an agent and retrieve their model instance
+        $agent = Agent::find(Auth::id());
+
+        if (!$agent) {
+            // This case ideally shouldn't happen if the route is protected by agent middleware
+            return redirect()->route('agent-list-tickets')->with("error", "Agent non authentifié ou introuvable.");
+        }
+
+        // Increment the agent's resolved tickets count
+        $agent->increment('tickets_resolu'); // increment() by default increments by 1
+
+        // Update ticket status and assignment
         $ticket->assigned_to = null;
         $ticket->statut = 'resolu';
         $ticket->save();
+
+        $action = 'Resolution de ticket #'.$ticket->id.' par agent'.$user->nom_complet.' de support N'.$agent->support_level;
+
+        $this->createHistorique($ticket->id,$action);
+
+        // Create a notification for the ticket's creator (customer)
         $notification = new Notification();
-        $notification->user_id = auth()->id();
+        $notification->user_id = $ticket->user_id; // Notify the user who created the ticket
         $notification->ticket_id = $id;
-        $notification->message = 'Votre ticket #'.$id.'a été résolu';
-        $notification->type = 'ticket_comment';
+        $notification->message = 'Votre ticket #' . $id . ' a été résolu par ' . $agent->name . '.'; // More informative message
+        $notification->type = 'ticket_resolved'; // More specific type
         $notification->save();
-        return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été résolu avec succès");
+
+        return redirect()->route('agent-list-tickets')->with("success", "Le ticket a été résolu avec succès.");
     }
 
     public function agentSearch(Request $request)

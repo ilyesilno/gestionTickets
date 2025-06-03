@@ -27,18 +27,18 @@
         <div class="cards grid grid-cols-2 gap-4">
         <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-400 via-gray-50 to-white-100 shadow-md text-center">
             <div class="number text-3xl text-light-700 font-extrabold ">
-              <span id="qualificationValue"></span> : {{$sla->duree_qualification}} mins
+              <span id="qualificationValue"></span> : {{$sla->duree_qualification * 60}} mins
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
-              Duree ecoule de qualification / SLA
+              Duree ecoule de qualification
             </div>
           </div>
           <div class="card p-7 rounded-lg border-2 border-light-400 bg-gradient-to-br from-gray-100 via-gray-50 to-white-100 shadow-md text-center">
             <div class="number text-3xl text-light-700 font-extrabold">
-              <span id="resolutionValue"></span> :{{$sla->duree_resolution}} hrs
+              <span id="resolutionValue"></span> :{{$sla->duree_resolution * 24}} hrs
             </div>
             <div class="text text-lg text-light-900 font-semibold mt-2">
-              Duree ecoule de traitement / SLA
+              Duree ecoule de traitement 
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@
               @else
                 <p>Pas de commentaire</p>
               @endif
-              @if($ticket->statut != 'resolu')
+              @if($ticket->statut != 'resolu' && $ticket->statut != 'ferme')
               <button
                 class="py-1 px-2 border border-black rounded-full absolute right-1 top-1 flex justify-center items-center"
                 id="openCreateCommentModalBtn">
@@ -147,8 +147,40 @@
             </td>
           </tr>
         </table>
+        @if($ticket->statut == 'resolu')
+        <div class="flex justify-between mt-2">
+          <a href="{{ route('close-client-ticket',$ticket->id) }}" class="py-2 px-4 bg-green-500 text-white font-medium rounded-md hover:shadow-md">
+            Fermer le ticket
+          </a>
 
+        </div>
+        @endif
       </div>
+      <div class="card mt-4">
+        <div class="card-header">
+            <h4>Attached Documents</h4>
+        </div>
+        <div class="card-body">
+            @if($ticket->documents->isNotEmpty())
+                <ul class="list-group">
+                    @foreach($ticket->documents as $document)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{{ Storage::disk('public')->url($document->chemin) }}" target="_blank">
+                                <i class="fas fa-file-alt me-2"></i> {{ $document->nom_fichier }}
+                            </a>
+                            <form action="{{ route('tickets.remove-document', $document->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p>Aucun document n'est attaché à ce ticket.</p>
+            @endif
+        </div>
+    </div>
     </div>
   </div>
   {{-- Create Comment --}}

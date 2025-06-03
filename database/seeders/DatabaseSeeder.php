@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\Sla;
+use App\Models\abonnement;
+use App\Models\Produit;
 use App\Models\User;
 use App\Models\Agent;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -89,6 +92,31 @@ class DatabaseSeeder extends Seeder
         Agent::factory()->create([
             'user_id' => 5,
             'support_level'=> 3
+        ]);
+
+        Sla::factory()->create([
+            'nom' => 'Standard',
+            'duree_qualification' => 5,
+            'duree_resolution' => 7
+        ]);
+
+        Sla::factory()->create([
+            'nom' => 'Premium',
+            'duree_qualification' => 2,
+            'duree_resolution' => 3
+        ]);
+
+        Produit::factory()->create([
+            'nom' => 'app 1',
+            'user_id' => 2
+        ]);
+
+        abonnement::factory()->create([
+            'date_debut' => '2025-06-15',
+            'date_fin' => '2026-06-15',
+            'produitID' => 1,
+            'slaID' => 1 
+
         ]);
 
         

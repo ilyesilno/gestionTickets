@@ -39,7 +39,7 @@
 
         <div class="card max-w-xs p-6 rounded-xl border-2 border-yellow-400 bg-gradient-to-br from-yellow-100 via-yellow-50 to-yellow-100 shadow-lg">
             <div class="text-4xl text-yellow-700 font-extrabold">
-                {{ $agentData->ticket_resolu }}
+                {{ $agentData->tickets_resolu }}
             </div>
             <div class="text-lg text-yellow-900 font-bold mt-3 uppercase tracking-wide">
                 Tickets Résolus
@@ -48,7 +48,7 @@
 
         <div class="card max-w-xs p-6 rounded-xl border-2 border-purple-400 bg-gradient-to-br from-purple-100 via-purple-50 to-purple-100 shadow-lg">
             <div class="text-4xl text-purple-700 font-extrabold">
-                {{ $agentData->ticket_escale }}
+                {{ $agentData->tickets_escale }}
             </div>
             <div class="text-lg text-purple-900 font-bold mt-3 uppercase tracking-wide">
                 Tickets Escaladés
