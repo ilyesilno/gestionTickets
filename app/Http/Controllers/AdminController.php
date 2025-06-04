@@ -227,9 +227,10 @@ class AdminController extends Controller
         
     }
     }   
-    public function pageChangementMdp(){
+    public function pageChangementMdp($id){
 
-        return view('admin.motdepasseManagement.modifier-mdp');
+        $user = User::findOrFail($id);
+        return view('admin.motdepasseManagement.modifier-mdp',compact('user'));
     }
        
     public function UpdateUser(Request $request, $id)
