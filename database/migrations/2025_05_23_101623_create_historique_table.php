@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('ticket_id');
             $table->foreign('ticket_id')->references('id')->on('tickets');
             $table->timestamps();
+            $table->string('action');
         });
     }
 

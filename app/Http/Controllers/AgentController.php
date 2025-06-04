@@ -25,9 +25,9 @@ class AgentController extends Controller
     }
     public function dashboard()
     {
-        $tickets = Ticket::where('assigned_to', auth()->id())->get();
+        $agent = Agent::where('user_id',auth()->id())->first();
+        $tickets = Ticket::where('assigned_to', $agent->id)->get();
         $user = User::where('id',auth()->id())->first();
-        $agent = Agent::where('user_id',$user->id)->first();
         $ticketsPerSupport =  Ticket::where('support_level',$agent->support_level,)
         ->where('statut','!=','resolu')
         ->where('statut','!=','ferme')
@@ -49,6 +49,7 @@ class AgentController extends Controller
     }
     public function afficherTicket($id)
     {
+        $agent = Agent::where('user_id',auth()->id())->first();
         $ticket = Ticket::where('id', $id)->first();
         $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
         $abonnement = abonnement::where('produitID',$produit->id)->get()->first();
@@ -57,7 +58,7 @@ class AgentController extends Controller
         
         $commentaires = Commentaire::where('ticket_id', $id)->get();
         $produit = Produit::where('user_id',$ticket->user_id)->get()->first();
-        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires','produit','sla'));
+        return view('agent.Ticket Management.show-ticket', compact('ticket', 'commentaires','produit','sla','agent'));
     }
 
     public function getSlaDurations($id){
@@ -93,7 +94,7 @@ class AgentController extends Controller
         $user = User::where('id',auth()->id())->first();
         $agent = Agent::where('user_id',auth()->id())->first();
         
-        $ticket->assigned_to = auth()->id();
+        $ticket->assigned_to = $agent->id;
         $ticket->statut = 'en cours';
         $ticket->save();
         $action = 'Affectation de ticket #'.$ticket->id.' a agent'.$user->nom_complet.' de support N'.$agent->support_level;

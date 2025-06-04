@@ -156,14 +156,16 @@
           @endif
 
         </table>
-        @if($ticket->assigned_to == auth()->id())
+        @if($ticket->assigned_to == $agent->id )
         <div class="flex justify-between mt-2">
           <a href="{{ route('resolve-agent-ticket',$ticket->id) }}" class="py-2 px-4 bg-green-500 text-white font-medium rounded-md hover:shadow-md">
             résoudre le ticket
           </a>
+          @if($ticket->support_level <= 2)
           <a href="{{ route('escalate-agent-ticket',$ticket->id) }}" class="py-2 px-4 bg-orange-500 text-white font-medium rounded-md hover:shadow-md">
             Escaller vers N{{ $ticket->support_level+ 1 }}
           </a>
+          @endif
         </div>
         @endif
       </div>
