@@ -55,7 +55,7 @@
           <!-- Utilisateurs -->
           <li
             class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-            hover:bg-purple-100 hover:text-purple-700
+            hover:bg-blue-100 hover:text-blue-700
             {{ (request()->route()->getName() === 'list-users' || request()->route()->getName() === 'create-user') ? 'bg-purple-200 text-purple-800' : '' }}">
             <div id="userManagementDropdown" tabindex="0" role="button"
               class="flex items-center gap-3 select-none">
@@ -74,7 +74,7 @@
           <!-- Produits -->
           <li
             class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-            hover:bg-pink-100 hover:text-pink-700
+            hover:bg-blue-100 hover:text-blue-700
             {{ (request()->route()->getName() === 'list-produits' || request()->route()->getName() === 'create-produit') ? 'bg-pink-200 text-pink-800' : '' }}">
             <div id="produitDropdown" tabindex="0" role="button"
               class="flex items-center gap-3 select-none">
@@ -93,7 +93,7 @@
           <!-- Abonnement -->
           <li
             class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-            hover:bg-green-100 hover:text-green-700
+            hover:bg-blue-100 hover:text-blue-700
             {{ (request()->route()->getName() === 'list-abonnements' || request()->route()->getName() === 'create-abonnement') ? 'bg-green-200 text-green-800' : '' }}">
             <div id="abonnementDropdown" tabindex="0" role="button"
               class="flex items-center gap-3 select-none">
@@ -111,7 +111,7 @@
           <!-- Agents -->
 <li
 class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-hover:bg-orange-100 hover:text-orange-700
+hover:bg-blue-100 hover:text-blue-700
 {{ (request()->route()->getName() === 'admin.liste.agents' || request()->route()->getName() === 'admin.suivi.agent') ? 'bg-orange-200 text-orange-800' : '' }}">
 <div id="agentDropdown" tabindex="0" role="button"
   class="flex items-center gap-3 select-none">
@@ -130,7 +130,7 @@ hover:bg-orange-100 hover:text-orange-700
           <!-- SLA -->
           <li
             class="relative px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-            hover:bg-yellow-100 hover:text-yellow-700
+            hover:bg-blue-100 hover:text-blue-700
             {{ (request()->route()->getName() === 'liste-slas' || request()->route()->getName() === 'create-sla') ? 'bg-yellow-200 text-yellow-800' : '' }}">
             <div id="slaDropdown" tabindex="0" role="button"
               class="flex items-center gap-3 select-none">
@@ -149,7 +149,7 @@ hover:bg-orange-100 hover:text-orange-700
           <!-- Tickets -->
           <li
             class="px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-            hover:bg-cyan-100 hover:text-cyan-700
+            hover:bg-blue-100 hover:text-blue-700
             {{ in_array(request()->route()->getName(), ['list-all-tickets', 'search-all-tickets', 'edit-ticket', 'show-ticket']) ? 'bg-cyan-200 text-cyan-800' : '' }}">
             <a href="{{ route('list-all-tickets') }}" class="flex items-center gap-3">
               <i class="fa-solid fa-circle-question fa-lg"></i>
@@ -161,7 +161,7 @@ hover:bg-orange-100 hover:text-orange-700
       <!-- Paramètres -->
 <li
 class="px-8 py-3 rounded-lg cursor-pointer transition-colors duration-300
-hover:bg-indigo-100 hover:text-indigo-700
+hover:bg-blue-100 hover:text-blue-700
 {{ request()->route()->getName() === 'admin.settings' ? 'bg-indigo-200 text-indigo-800' : '' }}">
 <a href="{{ route('admin.settings') }}" class="flex items-center gap-3">
   <i class="fa-solid fa-gear fa-lg"></i>
