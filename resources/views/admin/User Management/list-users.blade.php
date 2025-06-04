@@ -48,6 +48,11 @@
                       Delete
                     </button>
                   </form>
+                  <a href="{{route('modifier-mdp', ['id' => $user->id])}}" class="ml-2">
+                  <button type="submit" class="text-white text-base px-5 font-medium bg-[#DC3544] rounded-lg">
+                    modifier
+                  </button>
+                </a>
                 </td>
               </tr>
             @endforeach

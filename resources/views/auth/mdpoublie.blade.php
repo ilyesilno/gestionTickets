@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login</title>
+  <title>Mot de passe oublié</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -18,47 +17,34 @@
   <div class="container mx-auto px-4">
     <div class="flex flex-col items-center min-h-[75vh] rounded-lg shadow-lg bg-white overflow-hidden p-8 md:w-1/2 mx-auto">
 
-      <!-- Logo -->
-      <div class="mb-6">
-        <img src="{{ $logoPath ? asset('storage/' . $logoPath) : asset('storage/logos/logo-placeholder.jpg') }}" alt="Logo" class="h-40 mx-auto">
-
-   
-      </div>
-
       <!-- Title -->
-      <h2 class="text-4xl font-extrabold text-blue-600 mb-8 tracking-wide">Bienvenue</h2>
+      <h2 class="text-3xl font-extrabold text-blue-600 mb-6 tracking-wide">Mot de passe oublié</h2>
 
-      <!-- Login Form -->
-      <form action="{{ route('authenticate') }}" method="POST" class="space-y-6 w-full">
+      <!-- Password Reset Form -->
+      <form action="{{ route('mdp-request') }}" method="POST" class="space-y-6 w-full">
         @csrf
+        @method('put')
 
         <div>
           <label for="email" class="block mb-2 text-sm font-semibold text-gray-700">Email</label>
-          <input type="email" id="email" name="email" placeholder="Email"
+          <input type="email" id="email" name="email" placeholder="Votre adresse email" required
                  class="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-400 focus:outline-none" />
           @error('email')
             <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
           @enderror
         </div>
 
-        <div>
-          <label for="password" class="block mb-2 text-sm font-semibold text-gray-700">Mot de passe</label>
-          <input type="password" id="password" name="password" placeholder="Mot de passe"
-                 class="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:ring-2 focus:ring-blue-400 focus:outline-none" />
-          @error('password')
-            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
-          @enderror
-        </div>
-
         <button type="submit"
                 class="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg py-2 hover:from-blue-600 hover:to-blue-800 transition">
-          Se connecter
+          Envoyer la demande
         </button>
+
         <div class="text-center mt-4">
-          <a href="{{ route('mdp-demande') }}" class="text-blue-600 hover:underline">Mot de passe oublié ?</a>
+          <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Retour à la connexion</a>
+        </div>
       </form>
+
     </div>
   </div>
 </body>
-
 </html>

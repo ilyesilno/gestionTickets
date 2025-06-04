@@ -23,10 +23,15 @@ class AdminController extends Controller
     public function dashboard()
     {
         // $statuts = Statut::all();
-        
+        $usersmdp = User::where('mot_de_passe_oublie', true)->get();
         $tickets = Ticket::all();
-        return view('admin.admin-dashboard', compact('tickets'));
+        return view('admin.admin-dashboard', compact('tickets',"usersmdp"));
     }
+
+
+  
+
+    
      //!/* agent Management */
     
      public function suiviAgent(Request $request)
@@ -183,6 +188,72 @@ class AdminController extends Controller
       return redirect()->back()->with("warning", "L'abonnement a été supprimé avec succès");
   }
     //!/* User Management */
+
+
+    //envoi de la demande du changement du mdp
+    public function mdpdemande()
+    {
+
+        return view('auth.mdpoublie');
+    }
+    //changement status mdpoublie
+    public function mdprequest(request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->mot_de_passe_oublie = true;
+            $user->save();
+            return redirect()->back()->with('success', 'Une demande de réinitialisation a été envoyé.');
+        } else {
+            return redirect()->back()->with('error', 'Aucun utilisateur trouvé avec cet email.');
+        };
+        return view("auth.login");
+    }
+    //changement du mot de passe par ladmin
+    public function changementmdp(request $request, $id)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::find($id);
+        if ($user) {
+            $user->password = Hash::make($request->password);
+            $user->mot_de_passe_oublie = false;
+            $user->save();
+            return redirect()->route('login')->with('success', 'le mot de passe a été réinitialisé avec succès.');
+        } else {
+            return redirect()->back()->with('error', 'Aucune demande de réinitialisation trouvée.');
+        
+    }
+    }   
+    public function pageChangementMdp(){
+
+        return view('admin.motdepasseManagement.modifier-mdp');
+    }
+       
+    public function UpdateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        return view('admin.User Management.update-user', compact('user', 'roles'));
+    } 
+    public function PutUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $user->update([
+            
+            'password' => $request->input('password') ? Hash::make($request->input('password')) : $user->password,
+        ]);
+
+        return redirect()->route('list-users')->with('success', 'Le mot de passe a été mis à jour avec succès');
+    }
+
     public function createUser()
     {
         $roles = Role::all();

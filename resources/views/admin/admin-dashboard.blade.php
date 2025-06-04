@@ -60,7 +60,7 @@ $prioriteColor = [
     </div>
   </div>
 
-  <div class="recent-tickets bg-white rounded-xl p-6 shadow-md">
+  <div class="recent-mdp bg-white rounded-xl p-6 shadow-md ">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Tickets Récents</h1>
     <div class="overflow-x-auto rounded-lg border border-gray-200">
       <table class="min-w-full divide-y divide-gray-200 text-gray-700">
@@ -125,7 +125,48 @@ $prioriteColor = [
       </a>
     </div>
   </div>
+  <div class="recent-mdp bg-white rounded-xl p-6 shadow-md w-1/2">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 w-1/2">Mots de passe</h1>
+    <div class="overflow-x-auto rounded-lg border border-gray-200 ">
+      <table class="min-w-full divide-y divide-gray-200 text-gray-700">
+        <thead class="bg-gray-100 uppercase text-xs font-semibold tracking-wider">
+          <tr>
+            <th class="px-6 py-3 border border-gray-200 text-left">Email</th>
+            <th class="px-6 py-3 border border-gray-200 text-left">Nom</th>
+        
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          @foreach ($usersmdp as $usermdp)
+          <tr>
+   
+
+  
+            <td class="px-6 py-3 border border-gray-200 text-xs tracking-wide">
+              {{ $usermdp->email }}
+            </td>
+            <td class="px-6 py-3 border border-gray-200 text-xs tracking-wide">
+              {{ $usermdp->name }}
+            </td>
+        
+            <td class="px-6 py-3 border border-gray-200 text-xs tracking-wide">
+              <a href="{{ route('modifier-mdp', ['id' => $usermdp->id]) }}" class="text-blue-600 hover:underline">
+                Modifier mot de passe
+              </a>  
+     
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+ 
+    </div>
+  </div>
+</div>
+</div>
+
 
 </div>
 </div>
 @endsection
+

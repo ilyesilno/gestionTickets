@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('role_id')->references('id')->on('roles');
             $table->string('password');
             $table->timestamps();
+            $table->boolean("mot_de_passe_oublie")->default(false);
         });
 
         Schema::create('agents', function (Blueprint $table) {

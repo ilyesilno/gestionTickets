@@ -44,7 +44,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/list-users', [AdminController::class, 'listUsers'])->name('list-users');
         Route::get('/create-user', [AdminController::class, 'createUser'])->name('create-user');
         Route::post('/store-user', [AdminController::class, 'storeUser'])->name('store-user');
+        Route::get('/update-user/{id}', [AdminController::class, 'updateUser'])->name('update-user');
+        Route::put('/put-user/{id}', [AdminController::class, 'putUser'])->name('put-user');
         Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('delete-user');
+        route::get('/modifiermdp/{id}', [AdminController::class, 'pageChangementMdp'])->name('modifier-mdp');
+        route::put('/update-mdp/{id}', [AdminController::class, 'changementmdp'])->name('update-mdp');
 
         //? Statut Management
         Route::get('/list-statuts', [AdminController::class, 'listStatuts'])->name('list-statuts');
@@ -164,9 +168,17 @@ Route::get('/get-sla-durations-agent/{id}', [AgentController::class, 'getSlaDura
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/authenticate', [AuthController::class, 'login'])->name('authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+//redirection vers page demande du mot de passe
+Route::get('/redirectformulairemdp', [AdminController::class, 'mdpdemande'])->name('mdp-demande');
+Route::put('/redirectformulairemdp', [AdminController::class, 'mdprequest'])->name('mdp-request');
+
+Route::put('/mdpoublie', [AdminController::class, 'mdpoublie'])->name('mdp-oublie');
+
 
 // Route::middleware('RedirectBasedOnRole')->group(function () {
     Route::get('/', function () {
         return redirect()->route('login');
     // });
+
+
 });
